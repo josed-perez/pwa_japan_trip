@@ -422,6 +422,90 @@ body {
   text-decoration: line-line;
 }
 
+/* Collapse All Button in section title row */
+.collapse-all-btn {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  color: #94a3b8;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+.collapse-all-btn:active {
+  background: var(--bg-card);
+  color: #e2e8f0;
+}
+
+/* Card header row – always visible */
+.card-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.card-header-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* Individual collapse toggle per card */
+.collapse-btn {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  color: #64748b;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.0rem;
+  font-weight: 700;
+  line-height: 1;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+  padding: 0;
+  transform: rotate(90deg);
+}
+.card-collapsed .collapse-btn {
+  transform: rotate(0deg);
+}
+.collapse-btn:active {
+  background: var(--bg-card);
+}
+
+/* Collapsed card — compact, single-line feel */
+.itinerary-card.card-collapsed {
+  padding: 10px 14px;
+  border-color: #1e293b;
+}
+.itinerary-card.card-collapsed .card-title {
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+}
+
+/* Card body — the expandable content area */
+.card-body {
+  margin-top: 10px;
+}
+
+/* Legacy .card-top kept for safety (hotel card etc.) */
 .card-top {
   display: flex;
   justify-content: space-between;

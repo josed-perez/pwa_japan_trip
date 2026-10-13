@@ -78,6 +78,29 @@ function renderDaysNav() {
 }
 
 // 3. Render Current Selected Day
+let allCollapsed = false; // global collapsed state
+
+function normalizeTitle(str) {
+  // Strip emojis, leading/trailing spaces, lowercase
+  return String(str || '')
+    .replace(/[\u{1F300}-\u{1FFFF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu, '')
+    .replace(/[✈️🚄🚆🚞🚌🚃🚋🛫🛬]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+}
+
+function itemsOverlapByKeywords(titleA, titleB) {
+  const a = normalizeTitle(titleA);
+  const b = normalizeTitle(titleB);
+  if (a === b) return true;
+  // Extract meaningful words (4+ chars) and check intersection
+  const wordsA = a.split(/\W+/).filter(w => w.length >= 4);
+  const wordsB = new Set(b.split(/\W+/).filter(w => w.length >= 4));
+  const shared = wordsA.filter(w => wordsB.has(w));
+  return shared.length >= 2;
+}
+
 function renderCurrentDay() {
   if (!itineraryData) return;
 
@@ -88,11 +111,11 @@ function renderCurrentDay() {
   const dayDate = day.date;
   const mergedItems = [...day.items];
 
-  // Add any synced calendar events matching this date
+  // Add synced calendar events — deduplicate using fuzzy keyword matching
   const matchedCalEvents = customCalendarEvents.filter(ev => ev.date === dayDate);
   matchedCalEvents.forEach(cal => {
-    // Avoid exact duplicate
-    if (!mergedItems.some(it => it.title === cal.title)) {
+    const alreadyPresent = mergedItems.some(it => itemsOverlapByKeywords(it.title, cal.title));
+    if (!alreadyPresent) {
       mergedItems.unshift({
         id: `cal-${cal.id || Math.random().toString(36).substr(2, 9)}`,
         title: cal.title,
@@ -103,14 +126,20 @@ function renderCurrentDay() {
         cost_jpy: null,
         address: cal.location || null,
         google_maps_url: cal.location ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cal.location)}` : null,
-        opening_hours: cal.time ? `Scheduled: ${cal.time}` : null,
+        scheduled_time: cal.time || null,
+        pacing_note: null,
+        opening_hours: null,
         user_notes: cal.description || 'Synced from Google Calendar',
         is_calendar_event: true,
-        calendar_event: {
-          synced: true,
-          time_start: cal.time
-        }
+        calendar_event: { synced: true, time_start: cal.time }
       });
+    } else {
+      // Enrich existing matched item with calendar time if it has none
+      const match = mergedItems.find(it => itemsOverlapByKeywords(it.title, cal.title));
+      if (match && !match.scheduled_time && cal.time) {
+        match.scheduled_time = cal.time;
+        match.calendar_event = { synced: true, time_start: cal.time };
+      }
     }
   });
 
@@ -123,9 +152,6 @@ function renderCurrentDay() {
     if (currentFilter === 'shopping') return item.category === 'shopping';
     return true;
   });
-
-  // Find next pending item
-  const nextItem = filteredItems.find(it => !completedItems[it.id]);
 
   // Hotel card
   const hotelHtml = day.accommodation ? `
@@ -143,7 +169,7 @@ function renderCurrentDay() {
     </div>
   ` : '';
 
-  // Tailored Recommendations
+  // Tailored Recommendations — built but rendered AFTER the schedule list
   const recs = day.tailored_recommendations;
   let recsHtml = '';
   if (recs && recs.highlights && recs.highlights.length > 0) {
@@ -161,7 +187,7 @@ function renderCurrentDay() {
     `).join('');
 
     recsHtml = `
-      <div class="recommendations-card">
+      <div class="recommendations-card" style="margin-top: 20px;">
         <div class="rec-header">
           <div class="rec-title-group">
             <span class="rec-badge">Curated Gems</span>
@@ -176,29 +202,15 @@ function renderCurrentDay() {
     `;
   }
 
-  // Items List HTML
+  // Items List HTML — collapsible cards
   const itemsHtml = filteredItems.length > 0 ? filteredItems.map(item => {
     const isDone = !!completedItems[item.id];
     const catClass = `cat-${item.category || 'other'}`;
+    const isCollapsed = allCollapsed;
 
-    return `
-      <div class="itinerary-card ${isDone ? 'completed' : ''}" id="card-${item.id}">
-        <div class="card-top">
-          <div>
-            <div class="card-badges">
-              ${item.scheduled_time ? `<span class="time-badge">⏰ ${escapeHtml(item.scheduled_time)}</span>` : ''}
-              <span class="category-badge ${catClass}">${item.category || 'Activity'}</span>
-              ${item.is_calendar_event ? `<span class="category-badge" style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid #10b981;">📅 G-Cal Sync</span>` : ''}
-            </div>
-            <div class="card-title">${escapeHtml(item.title)}</div>
-            ${item.pacing_note ? `<div class="pacing-tag">⏳ ${escapeHtml(item.pacing_note)}</div>` : ''}
-            ${item.tagline ? `<div class="card-tagline">“${escapeHtml(item.tagline)}”</div>` : ''}
-          </div>
-          <button class="check-btn ${isDone ? 'checked' : ''}" data-id="${item.id}" title="Mark completed">
-            ${isDone ? '✓' : ''}
-          </button>
-        </div>
-
+    // Expanded body (hidden when collapsed)
+    const expandedBody = `
+      <div class="card-body">
         <div class="card-meta-list">
           ${item.opening_hours ? `
             <div class="meta-row">
@@ -206,14 +218,12 @@ function renderCurrentDay() {
               <span><strong>Hours:</strong> ${escapeHtml(item.opening_hours)}</span>
             </div>
           ` : ''}
-
           ${item.address ? `
             <div class="meta-row">
               <span class="meta-icon">📍</span>
               <span style="font-size: 0.78rem;">${escapeHtml(item.address)}</span>
             </div>
           ` : ''}
-
           ${item.user_notes ? `
             <div class="meta-row" style="color: #fde68a;">
               <span class="meta-icon">📝</span>
@@ -253,7 +263,6 @@ function renderCurrentDay() {
               🗺️ Search on Maps
             </a>
           `}
-
           ${item.website ? `
             <a href="${item.website}" target="_blank" rel="noopener" class="btn-action btn-action-web">
               🌐 Official Website
@@ -262,13 +271,39 @@ function renderCurrentDay() {
         </div>
       </div>
     `;
+
+    return `
+      <div class="itinerary-card ${isDone ? 'completed' : ''} ${isCollapsed ? 'card-collapsed' : ''}" id="card-${item.id}">
+        <div class="card-header-row" data-card-id="${item.id}">
+          <div class="card-header-left">
+            <div class="card-badges">
+              ${item.scheduled_time ? `<span class="time-badge">⏰ ${escapeHtml(item.scheduled_time)}</span>` : ''}
+              <span class="category-badge ${catClass}">${item.category || 'Activity'}</span>
+              ${item.is_calendar_event ? `<span class="category-badge" style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid #10b981;">📅 G-Cal</span>` : ''}
+            </div>
+            <div class="card-title">${escapeHtml(item.title)}</div>
+            ${item.pacing_note ? `<div class="pacing-tag">⏳ ${escapeHtml(item.pacing_note)}</div>` : ''}
+            ${item.tagline && !isCollapsed ? `<div class="card-tagline">"${escapeHtml(item.tagline)}"</div>` : ''}
+          </div>
+          <div class="card-header-actions">
+            <button class="check-btn ${isDone ? 'checked' : ''}" data-id="${item.id}" title="Mark completed">
+              ${isDone ? '✓' : ''}
+            </button>
+            <button class="collapse-btn" data-card-id="${item.id}" title="${isCollapsed ? 'Expand' : 'Collapse'}">
+              ${isCollapsed ? '›' : '‹'}
+            </button>
+          </div>
+        </div>
+        ${isCollapsed ? '' : expandedBody}
+      </div>
+    `;
   }).join('') : `
     <div style="padding: 24px; text-align: center; color: #94a3b8; background: var(--bg-surface); border-radius: var(--radius-md); border: 1px dashed var(--border-subtle);">
       No items match the selected category.
     </div>
   `;
 
-  // Render Day container
+  // Render Day container — schedule first, Curated Gems at the bottom
   dayContentEl.innerHTML = `
     <div class="day-header-card">
       <div class="day-meta-row">
@@ -280,18 +315,51 @@ function renderCurrentDay() {
       ${hotelHtml}
     </div>
 
-    ${recsHtml}
-
     <div class="section-title-row">
       <h3 class="section-title">Day Schedule (${filteredItems.length} items)</h3>
-      <span style="font-size: 0.75rem; color: #64748b;">Tap circle to check off</span>
+      <button id="toggle-collapse-btn" class="collapse-all-btn" title="${allCollapsed ? 'Expand all cards' : 'Collapse all cards'}">
+        ${allCollapsed ? '⊞ Expand All' : '⊟ Collapse All'}
+      </button>
     </div>
 
     <div class="timeline-list">
       ${itemsHtml}
     </div>
+
+    ${recsHtml}
   `;
+
+  // Bind collapse-all toggle
+  document.getElementById('toggle-collapse-btn').addEventListener('click', () => {
+    allCollapsed = !allCollapsed;
+    renderCurrentDay();
+  });
+
+  // Bind per-card collapse buttons (event delegation)
+  dayContentEl.querySelectorAll('.collapse-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const card = document.getElementById(`card-${btn.dataset.cardId}`);
+      if (!card) return;
+      card.classList.toggle('card-collapsed');
+      const collapsed = card.classList.contains('card-collapsed');
+      btn.textContent = collapsed ? '›' : '‹';
+      // Re-render body inline instead of full re-render for smoothness
+      const bodyEl = card.querySelector('.card-body');
+      const item = filteredItems.find(it => it.id === btn.dataset.cardId);
+      if (!item) return;
+      if (collapsed) {
+        if (bodyEl) bodyEl.remove();
+        const taglineEl = card.querySelector('.card-tagline');
+        if (taglineEl) taglineEl.remove();
+      } else {
+        // Re-render from scratch to restore body
+        renderCurrentDay();
+      }
+    });
+  });
 }
+
 
 // 4. Calendar Sync Handlers
 function updateSyncButtonState() {
@@ -358,12 +426,12 @@ function syncSampleFlightAndTrainEvents() {
     },
     {
       id: "ev-train-osaka",
-      title: "🚄 Tokaido Shinkansen (Tokyo ➔ Shin-Osaka)",
+      title: "Train to Shin-Osaka",
       date: "2026-11-10",
       time: "10:15 - 12:45",
-      location: "Tokyo Station Shinkansen Track 14",
+      location: "Tokyo Station Shinkansen Platform 14",
       category: "transport",
-      description: "Nozomi Shinkansen. Oversized baggage reserved in Car 16, Row 17."
+      description: "Nozomi Shinkansen to Shin-Osaka. Oversized baggage reserved in Car 16, Row 17. ~2h30m journey with Mt. Fuji views on the right side."
     },
     {
       id: "ev-train-koya",
