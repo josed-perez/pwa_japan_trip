@@ -85,20 +85,83 @@ function normalizeTitle(str) {
   return String(str || '')
     .replace(/[\u{1F300}-\u{1FFFF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu, '')
     .replace(/[✈️🚄🚆🚞🚌🚃🚋🛫🛬]/g, '')
+    .replace(/[^\w\s]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
     .toLowerCase();
 }
 
+function itemSortKey(item) {
+  if (!item) return Number.MAX_SAFE_INTEGER;
+  let timeValue = null;
+
+  if (item.scheduled_time) {
+    const timeMatch = String(item.scheduled_time).match(/(\d{1,2}):(\d{2})/);
+    if (timeMatch) {
+      timeValue = Number(timeMatch[1]) * 60 + Number(timeMatch[2]);
+    }
+  }
+
+  if (item.calendar_event && item.calendar_event.time_start) {
+    const timeMatch = String(item.calendar_event.time_start).match(/(\d{1,2}):(\d{2})/);
+    if (timeMatch) {
+      const candidate = Number(timeMatch[1]) * 60 + Number(timeMatch[2]);
+      if (timeValue === null || candidate < timeValue) {
+        timeValue = candidate;
+      }
+    }
+  }
+
+  if (timeValue === null) {
+    return Number.MAX_SAFE_INTEGER;
+  }
+
+  return timeValue;
+}
+
 function itemsOverlapByKeywords(titleA, titleB) {
   const a = normalizeTitle(titleA);
   const b = normalizeTitle(titleB);
+  if (!a || !b) return false;
   if (a === b) return true;
-  // Extract meaningful words (4+ chars) and check intersection
-  const wordsA = a.split(/\W+/).filter(w => w.length >= 4);
-  const wordsB = new Set(b.split(/\W+/).filter(w => w.length >= 4));
+
+  const wordsA = a.split(/\s+/).filter(w => w.length >= 3);
+  const wordsB = new Set(b.split(/\s+/).filter(w => w.length >= 3));
   const shared = wordsA.filter(w => wordsB.has(w));
   return shared.length >= 2;
+}
+
+function mergeCalendarEventIntoItem(item, cal) {
+  if (!item || !cal) return;
+
+  if (!item.scheduled_time && cal.time) {
+    item.scheduled_time = cal.time;
+  }
+
+  if (!item.address && cal.location) {
+    item.address = cal.location;
+  }
+
+  if (cal.location && !item.google_maps_url) {
+    item.google_maps_url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cal.location)}`;
+  }
+
+  if (cal.description && (!item.user_notes || cal.description.length > item.user_notes.length)) {
+    item.user_notes = cal.description;
+  }
+
+  if (cal.category && !item.category) {
+    item.category = cal.category;
+  }
+
+  item.is_calendar_event = true;
+  item.calendar_event = {
+    synced: true,
+    event_id: cal.id || item.calendar_event?.event_id || null,
+    summary: item.title,
+    time_start: item.scheduled_time || cal.time || item.calendar_event?.time_start || null,
+    time_end: cal.time_end || null
+  };
 }
 
 function renderCurrentDay() {
@@ -107,43 +170,40 @@ function renderCurrentDay() {
   const day = itineraryData.days.find(d => d.day_index === currentDayIndex);
   if (!day) return;
 
-  // Merge calendar events synced to this date
   const dayDate = day.date;
-  const mergedItems = [...day.items];
+  const mergedItems = [...(day.items || [])].map(item => ({ ...item }));
 
-  // Add synced calendar events — deduplicate using fuzzy keyword matching
   const matchedCalEvents = customCalendarEvents.filter(ev => ev.date === dayDate);
   matchedCalEvents.forEach(cal => {
-    const alreadyPresent = mergedItems.some(it => itemsOverlapByKeywords(it.title, cal.title));
-    if (!alreadyPresent) {
-      mergedItems.unshift({
-        id: `cal-${cal.id || Math.random().toString(36).substr(2, 9)}`,
-        title: cal.title,
-        category: cal.category || 'transport',
-        order: 0,
-        city: day.city,
-        cost_eur: null,
-        cost_jpy: null,
-        address: cal.location || null,
-        google_maps_url: cal.location ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cal.location)}` : null,
-        scheduled_time: cal.time || null,
-        pacing_note: null,
-        opening_hours: null,
-        user_notes: cal.description || 'Synced from Google Calendar',
-        is_calendar_event: true,
-        calendar_event: { synced: true, time_start: cal.time }
-      });
-    } else {
-      // Enrich existing matched item with calendar time if it has none
-      const match = mergedItems.find(it => itemsOverlapByKeywords(it.title, cal.title));
-      if (match && !match.scheduled_time && cal.time) {
-        match.scheduled_time = cal.time;
-        match.calendar_event = { synced: true, time_start: cal.time };
-      }
+    const existingIndex = mergedItems.findIndex(it => itemsOverlapByKeywords(it.title, cal.title));
+
+    if (existingIndex >= 0) {
+      const match = mergedItems[existingIndex];
+      mergeCalendarEventIntoItem(match, cal);
+      return;
     }
+
+    mergedItems.unshift({
+      id: `cal-${cal.id || Math.random().toString(36).substr(2, 9)}`,
+      title: cal.title,
+      category: cal.category || 'transport',
+      order: 0,
+      city: day.city,
+      cost_eur: null,
+      cost_jpy: null,
+      address: cal.location || null,
+      google_maps_url: cal.location ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cal.location)}` : null,
+      scheduled_time: cal.time || null,
+      pacing_note: null,
+      opening_hours: null,
+      user_notes: cal.description || 'Synced from Google Calendar',
+      is_calendar_event: true,
+      calendar_event: { synced: true, event_id: cal.id || null, time_start: cal.time || null }
+    });
   });
 
-  // Filter items
+  mergedItems.sort((a, b) => itemSortKey(a) - itemSortKey(b));
+
   const filteredItems = mergedItems.filter(item => {
     if (currentFilter === 'all') return true;
     if (currentFilter === 'attraction') return item.category === 'attraction';
