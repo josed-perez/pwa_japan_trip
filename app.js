@@ -135,7 +135,6 @@ function renderCurrentDay() {
         <div class="hotel-label">Tonight's Stay</div>
         <div class="hotel-name">${escapeHtml(day.accommodation.name)}</div>
         ${day.accommodation.address ? `<div class="hotel-address">${escapeHtml(day.accommodation.address)}</div>` : ''}
-        ${day.accommodation.cost_eur ? `<div style="font-size: 0.76rem; color: #a7f3d0; margin-top: 2px;">Booked: €${day.accommodation.cost_eur.toFixed(2)}</div>` : ''}
         <div class="hotel-actions">
           ${day.accommodation.maps_url ? `<a href="${day.accommodation.maps_url}" target="_blank" rel="noopener" class="btn-mini btn-mini-primary">🗺️ Navigate</a>` : ''}
           ${day.accommodation.website ? `<a href="${day.accommodation.website}" target="_blank" rel="noopener" class="btn-mini btn-mini-secondary">🌐 Booking Details</a>` : ''}
@@ -187,12 +186,12 @@ function renderCurrentDay() {
         <div class="card-top">
           <div>
             <div class="card-badges">
+              ${item.scheduled_time ? `<span class="time-badge">⏰ ${escapeHtml(item.scheduled_time)}</span>` : ''}
               <span class="category-badge ${catClass}">${item.category || 'Activity'}</span>
               ${item.is_calendar_event ? `<span class="category-badge" style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid #10b981;">📅 G-Cal Sync</span>` : ''}
-              ${item.cost_eur ? `<span class="cost-tag">€${item.cost_eur.toFixed(2)}</span>` : ''}
-              ${item.cost_jpy ? `<span class="cost-tag" style="color: #fde047;">${escapeHtml(item.cost_jpy)}</span>` : ''}
             </div>
             <div class="card-title">${escapeHtml(item.title)}</div>
+            ${item.pacing_note ? `<div class="pacing-tag">⏳ ${escapeHtml(item.pacing_note)}</div>` : ''}
             ${item.tagline ? `<div class="card-tagline">“${escapeHtml(item.tagline)}”</div>` : ''}
           </div>
           <button class="check-btn ${isDone ? 'checked' : ''}" data-id="${item.id}" title="Mark completed">
@@ -472,8 +471,6 @@ function setupEventListeners() {
       } else if (tabName === 'guide') {
         populateHandbookModal();
         handbookModalEl.classList.add('open');
-      } else if (tabName === 'budget') {
-        openBudgetModal();
       }
     });
   });
@@ -576,52 +573,6 @@ function populateHandbookModal() {
       `).join('')}
     </div>
   `;
-}
-
-function openBudgetModal() {
-  if (!itineraryData) return;
-  const contentEl = document.getElementById('handbook-content');
-  const titleEl = document.getElementById('handbook-modal-title');
-  titleEl.innerText = "💰 Trip Budget & Expenses";
-
-  // Calculate total costs
-  let totalEur = 0;
-  let itemsCount = 0;
-  itineraryData.days.forEach(d => {
-    d.items.forEach(it => {
-      if (it.cost_eur) {
-        totalEur += it.cost_eur;
-        itemsCount++;
-      }
-    });
-  });
-
-  // Add summary expenses
-  let summaryTotal = 0;
-  itineraryData.metadata.summary_expenses.forEach(s => {
-    if (s.cost_eur) summaryTotal += s.cost_eur;
-  });
-
-  contentEl.innerHTML = `
-    <div style="background: var(--bg-card); border-radius: var(--radius-sm); padding: 14px; text-align: center; margin-bottom: 14px; border: 1px solid var(--border-subtle);">
-      <div style="font-size: 0.8rem; color: #94a3b8; text-transform: uppercase;">Total Planned Budget</div>
-      <div style="font-size: 2rem; font-weight: 800; color: #34d399; margin: 4px 0;">€${(totalEur + summaryTotal).toFixed(2)}</div>
-      <div style="font-size: 0.78rem; color: #cbd5e1;">Across 16 Days (${itineraryData.metadata.start_date} – ${itineraryData.metadata.end_date})</div>
-    </div>
-
-    <h4 style="margin: 12px 0 6px 0; color: #cbd5e1;">Summary / Transport Passes</h4>
-    ${itineraryData.metadata.summary_expenses.map(s => `
-      <div style="background: var(--bg-card); padding: 10px; border-radius: var(--radius-sm); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
-        <div>
-          <strong style="color: #ffffff; font-size: 0.85rem;">${escapeHtml(s.title)}</strong>
-          <div style="font-size: 0.74rem; color: #94a3b8;">${escapeHtml(s.notes.substring(0, 70))}...</div>
-        </div>
-        <span style="font-weight: 700; color: #38bdf8;">€${s.cost_eur.toFixed(2)}</span>
-      </div>
-    `).join('')}
-  `;
-
-  handbookModalEl.classList.add('open');
 }
 
 function escapeHtml(str) {

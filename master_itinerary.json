@@ -6,16 +6,7 @@
     "end_date": "2026-11-24",
     "total_days": 16,
     "timezone": "Asia/Tokyo",
-    "generated_at": "2026-10-13T12:54:55.602155Z",
-    "currency": "EUR",
-    "summary_expenses": [
-      {
-        "title": "IC card usage",
-        "category": "Transport",
-        "cost_eur": 84.0,
-        "notes": "IC card total: 10,907 yen for two people.\n\nThis is the amount used for two people following this itinerary. \n\nWe often opted to walk to attractions if they were close to each other.\n\nYour final amount might vary depending on how often you use your IC card."
-      }
-    ]
+    "generated_at": "2026-10-13T13:51:48.550148Z"
   },
   "days": [
     {
@@ -39,6 +30,8 @@
           "category": "hotel",
           "order": 1,
           "city": "Tokyo",
+          "scheduled_time": "17:30 - 18:30",
+          "pacing_note": "Check-in, unpack & settle in",
           "cost_eur": 68.0,
           "cost_jpy": null,
           "address": "Tokyo-to, Tokyo, Chuo-ku Nihombashi Kakigara-cho 1-10-2 , Japan",
@@ -54,8 +47,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Hotel Toyoko Inn",
-            "time_start": null,
-            "time_end": null
+            "time_start": "17:30",
+            "time_end": "18:30"
           }
         },
         {
@@ -64,6 +57,8 @@
           "category": "flight",
           "order": 2,
           "city": "Tokyo",
+          "scheduled_time": "15:45 - 17:00",
+          "pacing_note": "Landing at Haneda Airport, customs & transit",
           "cost_eur": 893.81,
           "cost_jpy": null,
           "address": null,
@@ -79,8 +74,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Flight Tokyo",
-            "time_start": null,
-            "time_end": null
+            "time_start": "15:45",
+            "time_end": "17:00"
           }
         }
       ],
@@ -129,6 +124,8 @@
           "category": "hotel",
           "order": 1,
           "city": "Osaka",
+          "scheduled_time": "13:15 - 14:00",
+          "pacing_note": "Check-in & drop luggage",
           "cost_eur": 132.0,
           "cost_jpy": null,
           "address": "Osaka Prefecture, Osaka, Chuo-ku Higashishinsaibashi 1-17-11, Japan",
@@ -144,8 +141,8 @@
             "synced": false,
             "event_id": null,
             "summary": "HOTEL HILLARYS Shinsaibashi",
-            "time_start": null,
-            "time_end": null
+            "time_start": "13:15",
+            "time_end": "14:00"
           }
         },
         {
@@ -154,6 +151,8 @@
           "category": "restaurant",
           "order": 2,
           "city": "Osaka",
+          "scheduled_time": "21:30 - 22:45",
+          "pacing_note": "Yakitori dinner & relaxed drinks",
           "cost_eur": 15.0,
           "cost_jpy": null,
           "address": "Japan, 〒542-0071 Osaka, Chuo Ward, Dotonbori, 1 Chome−6−15 コムラード・ドウトンビル ３F",
@@ -169,8 +168,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Torikizoku",
-            "time_start": null,
-            "time_end": null
+            "time_start": "21:30",
+            "time_end": "22:45"
           }
         },
         {
@@ -179,6 +178,8 @@
           "category": "attraction",
           "order": 3,
           "city": "Osaka",
+          "scheduled_time": "20:15 - 21:30",
+          "pacing_note": "Retro neon district & Tsutenkaku Tower",
           "cost_eur": null,
           "cost_jpy": "Free",
           "address": null,
@@ -198,8 +199,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Shinsekai",
-            "time_start": null,
-            "time_end": null
+            "time_start": "20:15",
+            "time_end": "21:30"
           }
         },
         {
@@ -208,6 +209,8 @@
           "category": "restaurant",
           "order": 4,
           "city": "Osaka",
+          "scheduled_time": "14:15 - 15:45",
+          "pacing_note": "Late lunch & fresh seafood street market",
           "cost_eur": 20.0,
           "cost_jpy": "Free entry / Pay per stall",
           "address": "2 Chome Nipponbashi, Chuo Ward, Osaka, 542-0073, Japan",
@@ -227,8 +230,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Kuromon Market",
-            "time_start": null,
-            "time_end": null
+            "time_start": "14:15",
+            "time_end": "15:45"
           }
         },
         {
@@ -237,6 +240,8 @@
           "category": "shopping",
           "order": 5,
           "city": "Osaka",
+          "scheduled_time": "16:00 - 17:15",
+          "pacing_note": "Leisurely stroll through covered arcade",
           "cost_eur": null,
           "cost_jpy": "Free",
           "address": null,
@@ -256,8 +261,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Shinsaibashi shopping street",
-            "time_start": null,
-            "time_end": null
+            "time_start": "16:00",
+            "time_end": "17:15"
           }
         },
         {
@@ -266,6 +271,8 @@
           "category": "attraction",
           "order": 6,
           "city": "Osaka",
+          "scheduled_time": "17:30 - 18:00",
+          "pacing_note": "Sunset photo with iconic running man",
           "cost_eur": null,
           "cost_jpy": null,
           "address": null,
@@ -281,8 +288,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Glico Man",
-            "time_start": null,
-            "time_end": null
+            "time_start": "17:30",
+            "time_end": "18:00"
           }
         },
         {
@@ -291,6 +298,8 @@
           "category": "restaurant",
           "order": 7,
           "city": "Osaka",
+          "scheduled_time": "18:00 - 19:00",
+          "pacing_note": "Canal walk as neon billboards light up",
           "cost_eur": 15.0,
           "cost_jpy": "Free",
           "address": null,
@@ -311,8 +320,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Try Street food in Dotonbori",
-            "time_start": null,
-            "time_end": null
+            "time_start": "18:00",
+            "time_end": "19:00"
           }
         },
         {
@@ -321,6 +330,8 @@
           "category": "attraction",
           "order": 8,
           "city": "Osaka",
+          "scheduled_time": "18:00 - 19:00",
+          "pacing_note": "Canal walk as neon billboards light up",
           "cost_eur": null,
           "cost_jpy": "Free",
           "address": null,
@@ -341,8 +352,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Dotonbori",
-            "time_start": null,
-            "time_end": null
+            "time_start": "18:00",
+            "time_end": "19:00"
           }
         },
         {
@@ -351,6 +362,8 @@
           "category": "transport",
           "order": 9,
           "city": "Osaka",
+          "scheduled_time": "10:15 - 12:45",
+          "pacing_note": "Tokaido Shinkansen bullet train (Mt. Fuji views)",
           "cost_eur": 182.0,
           "cost_jpy": null,
           "address": null,
@@ -366,8 +379,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Train from Tokyo to Osaka",
-            "time_start": null,
-            "time_end": null
+            "time_start": "10:15",
+            "time_end": "12:45"
           }
         }
       ],
@@ -409,6 +422,8 @@
           "category": "shopping",
           "order": 1,
           "city": "Osaka",
+          "scheduled_time": "21:30 - 22:45",
+          "pacing_note": "Ebisu Ferris wheel & late souvenir shopping",
           "cost_eur": 20.0,
           "cost_jpy": "¥600 for Ferris wheel",
           "address": "7-13 Souemoncho, Chuo Ward, Osaka, 542-0084, Japan",
@@ -427,8 +442,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Don Quijote",
-            "time_start": null,
-            "time_end": null
+            "time_start": "21:30",
+            "time_end": "22:45"
           }
         },
         {
@@ -437,6 +452,8 @@
           "category": "restaurant",
           "order": 2,
           "city": "Osaka",
+          "scheduled_time": "13:45 - 15:00",
+          "pacing_note": "Relaxed okonomiyaki lunch",
           "cost_eur": 30.0,
           "cost_jpy": null,
           "address": "2 Chome-3-17 Sennichimae, Chuo Ward, Osaka, 542-0074, Japan",
@@ -452,8 +469,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Fukutaro",
-            "time_start": null,
-            "time_end": null
+            "time_start": "13:45",
+            "time_end": "15:00"
           }
         },
         {
@@ -462,6 +479,8 @@
           "category": "attraction",
           "order": 3,
           "city": "Osaka",
+          "scheduled_time": "17:15 - 19:00",
+          "pacing_note": "Floating Garden sunset (~16:45) & night skyline",
           "cost_eur": 23.0,
           "cost_jpy": "¥2,000",
           "address": "1 Chome-1-88 Oyodonaka, Kita Ward, Osaka, 531-6023, Japan",
@@ -481,8 +500,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Umeda Sky Building",
-            "time_start": null,
-            "time_end": null
+            "time_start": "17:15",
+            "time_end": "19:00"
           }
         },
         {
@@ -491,6 +510,8 @@
           "category": "attraction",
           "order": 4,
           "city": "Osaka",
+          "scheduled_time": null,
+          "pacing_note": null,
           "cost_eur": null,
           "cost_jpy": null,
           "address": null,
@@ -516,6 +537,8 @@
           "category": "attraction",
           "order": 5,
           "city": "Osaka",
+          "scheduled_time": "11:15 - 13:30",
+          "pacing_note": "Castle museum, stone ramparts & park grounds",
           "cost_eur": null,
           "cost_jpy": "¥600 (Grounds free)",
           "address": "1-1 Osakajo, Chuo Ward, Osaka, 540-0002, Japan",
@@ -535,8 +558,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Osaka Castle",
-            "time_start": null,
-            "time_end": null
+            "time_start": "11:15",
+            "time_end": "13:30"
           }
         },
         {
@@ -545,6 +568,8 @@
           "category": "attraction",
           "order": 6,
           "city": "Osaka",
+          "scheduled_time": "09:45 - 10:45",
+          "pacing_note": "Morning visit to giant lion-head stage",
           "cost_eur": null,
           "cost_jpy": "Free",
           "address": "2 Chome-9-19 Motomachi, Naniwa Ward, Osaka, 556-0016, Japan",
@@ -564,8 +589,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Namba Yasaka Shrine",
-            "time_start": null,
-            "time_end": null
+            "time_start": "09:45",
+            "time_end": "10:45"
           }
         },
         {
@@ -574,6 +599,8 @@
           "category": "restaurant",
           "order": 7,
           "city": "Osaka",
+          "scheduled_time": "19:15 - 19:45",
+          "pacing_note": "Quick konbini snack break",
           "cost_eur": 25.0,
           "cost_jpy": null,
           "address": null,
@@ -589,8 +616,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Snacks from Convenience stores in Osaka",
-            "time_start": null,
-            "time_end": null
+            "time_start": "19:15",
+            "time_end": "19:45"
           }
         },
         {
@@ -599,6 +626,8 @@
           "category": "restaurant",
           "order": 8,
           "city": "Osaka",
+          "scheduled_time": "20:00 - 21:15",
+          "pacing_note": "Cozy tonkotsu ramen dinner",
           "cost_eur": 16.0,
           "cost_jpy": null,
           "address": null,
@@ -614,8 +643,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Ichiran Ramen",
-            "time_start": null,
-            "time_end": null
+            "time_start": "20:00",
+            "time_end": "21:15"
           }
         }
       ],
@@ -664,6 +693,8 @@
           "category": "restaurant",
           "order": 1,
           "city": "Koyasan",
+          "scheduled_time": null,
+          "pacing_note": null,
           "cost_eur": null,
           "cost_jpy": null,
           "address": null,
@@ -689,6 +720,8 @@
           "category": "attraction",
           "order": 2,
           "city": "Koyasan",
+          "scheduled_time": "19:15 - 20:45",
+          "pacing_note": "Atmospheric lantern walk through ancient cedars",
           "cost_eur": null,
           "cost_jpy": "Free",
           "address": "Koyasan, Koya, Ito District, Wakayama 648-0211, Japan",
@@ -708,8 +741,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Okunoin Cemetery",
-            "time_start": null,
-            "time_end": null
+            "time_start": "19:15",
+            "time_end": "20:45"
           }
         },
         {
@@ -718,6 +751,8 @@
           "category": "attraction",
           "order": 3,
           "city": "Koyasan",
+          "scheduled_time": null,
+          "pacing_note": null,
           "cost_eur": 6.4,
           "cost_jpy": null,
           "address": "132 Koyasan, Koya, Ito District, Wakayama 648-0294, Japan",
@@ -743,6 +778,8 @@
           "category": "attraction",
           "order": 4,
           "city": "Koyasan",
+          "scheduled_time": "16:00 - 17:00",
+          "pacing_note": "Treasures, sacred mandalas & Buddhist art",
           "cost_eur": 16.0,
           "cost_jpy": "¥600",
           "address": "306 Koyasan, Koya, Ito District, Wakayama 648-0211, Japan",
@@ -760,8 +797,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Reihokan Museum",
-            "time_start": null,
-            "time_end": null
+            "time_start": "16:00",
+            "time_end": "17:00"
           }
         },
         {
@@ -770,6 +807,8 @@
           "category": "attraction",
           "order": 5,
           "city": "Koyasan",
+          "scheduled_time": "12:00 - 12:45",
+          "pacing_note": "Grand entrance gate to Mount Koya",
           "cost_eur": null,
           "cost_jpy": "Free",
           "address": "Koyasan, 高野町 Koya, Ito District, Wakayama 648-0211, Japan",
@@ -788,8 +827,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Daimon Gate",
-            "time_start": null,
-            "time_end": null
+            "time_start": "12:00",
+            "time_end": "12:45"
           }
         },
         {
@@ -798,6 +837,8 @@
           "category": "attraction",
           "order": 6,
           "city": "Koyasan",
+          "scheduled_time": "13:00 - 14:15",
+          "pacing_note": "Konpon Daito Pagoda & sacred halls",
           "cost_eur": null,
           "cost_jpy": "¥500 (Grounds free)",
           "address": "152 Koyasan, Koya, Ito District, Wakayama 648-0211, Japan",
@@ -817,8 +858,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Danjo Garan complex",
-            "time_start": null,
-            "time_end": null
+            "time_start": "13:00",
+            "time_end": "14:15"
           }
         },
         {
@@ -827,6 +868,8 @@
           "category": "hotel",
           "order": 7,
           "city": "Koyasan",
+          "scheduled_time": "11:00 - 11:45",
+          "pacing_note": "Temple check-in & drop daypacks",
           "cost_eur": 345.33,
           "cost_jpy": null,
           "address": "594 Koyasan, Koya, Ito District, Wakayama 648-0211, Japan",
@@ -842,8 +885,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Koyasan Shukubo Daienin",
-            "time_start": null,
-            "time_end": null
+            "time_start": "11:00",
+            "time_end": "11:45"
           }
         },
         {
@@ -852,6 +895,8 @@
           "category": "transport",
           "order": 8,
           "city": "Koyasan",
+          "scheduled_time": "09:00 - 10:45",
+          "pacing_note": "Nankai Limited Express + scenic cable car",
           "cost_eur": 56.0,
           "cost_jpy": null,
           "address": null,
@@ -867,8 +912,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Train to Koyasan",
-            "time_start": null,
-            "time_end": null
+            "time_start": "09:00",
+            "time_end": "10:45"
           }
         }
       ],
@@ -917,6 +962,8 @@
           "category": "hotel",
           "order": 1,
           "city": "Kyoto",
+          "scheduled_time": "19:30 onwards",
+          "pacing_note": "Check-in at Kyoto base & rest",
           "cost_eur": 510.47,
           "cost_jpy": null,
           "address": "530 Asakuracho, Nakagyo Ward, Kyoto, 604-8074, Japan",
@@ -932,7 +979,7 @@
             "synced": false,
             "event_id": null,
             "summary": "Piece Hostel Sanjo",
-            "time_start": null,
+            "time_start": "19:30 onwards",
             "time_end": null
           }
         },
@@ -942,6 +989,8 @@
           "category": "transport",
           "order": 2,
           "city": "Nara",
+          "scheduled_time": "18:15 - 19:15",
+          "pacing_note": "Retrieve bags & scenic train to Kyoto",
           "cost_eur": 20.0,
           "cost_jpy": null,
           "address": null,
@@ -957,8 +1006,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Train to Kyoto",
-            "time_start": null,
-            "time_end": null
+            "time_start": "18:15",
+            "time_end": "19:15"
           }
         },
         {
@@ -967,6 +1016,8 @@
           "category": "restaurant",
           "order": 3,
           "city": "Nara",
+          "scheduled_time": "13:30 - 14:45",
+          "pacing_note": "Relaxed lunch at cozy local shop",
           "cost_eur": 20.0,
           "cost_jpy": null,
           "address": "1-1 Tsurufukuincho, Nara, 630-8393, Japan",
@@ -982,8 +1033,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Parco Okonomiyaki",
-            "time_start": null,
-            "time_end": null
+            "time_start": "13:30",
+            "time_end": "14:45"
           }
         },
         {
@@ -992,6 +1043,8 @@
           "category": "attraction",
           "order": 4,
           "city": "Nara",
+          "scheduled_time": "17:15 - 18:00",
+          "pacing_note": "Lantern-lined shrine in the peaceful forest",
           "cost_eur": 7.68,
           "cost_jpy": "¥500 for inner sanctuary (Grounds free)",
           "address": "160 Kasuganocho, Nara, 630-8212, Japan",
@@ -1010,8 +1063,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Katsuga Taisha",
-            "time_start": null,
-            "time_end": null
+            "time_start": "17:15",
+            "time_end": "18:00"
           }
         },
         {
@@ -1020,6 +1073,8 @@
           "category": "attraction",
           "order": 5,
           "city": "Nara",
+          "scheduled_time": null,
+          "pacing_note": null,
           "cost_eur": 9.2,
           "cost_jpy": null,
           "address": "406-1 Zoshicho, Nara, 630-8211, Japan",
@@ -1045,6 +1100,8 @@
           "category": "attraction",
           "order": 6,
           "city": "Nara",
+          "scheduled_time": "16:30 - 17:15",
+          "pacing_note": "Interacting with friendly deer in afternoon light",
           "cost_eur": null,
           "cost_jpy": "Free",
           "address": null,
@@ -1063,8 +1120,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Nara Park",
-            "time_start": null,
-            "time_end": null
+            "time_start": "16:30",
+            "time_end": "17:15"
           }
         },
         {
@@ -1073,6 +1130,8 @@
           "category": "attraction",
           "order": 7,
           "city": "Nara",
+          "scheduled_time": null,
+          "pacing_note": null,
           "cost_eur": 18.4,
           "cost_jpy": null,
           "address": "74 Suimoncho, Nara, 630-8208, Japan",
@@ -1098,6 +1157,8 @@
           "category": "restaurant",
           "order": 8,
           "city": "Nara",
+          "scheduled_time": "11:00 - 11:45",
+          "pacing_note": "High-speed mochi pounding show & warm mochi",
           "cost_eur": 2.0,
           "cost_jpy": "¥180 - ¥450",
           "address": "29 Hashimotocho, Nara, 630-8217, Japan",
@@ -1116,8 +1177,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Nakatanidou",
-            "time_start": null,
-            "time_end": null
+            "time_start": "11:00",
+            "time_end": "11:45"
           }
         },
         {
@@ -1126,6 +1187,8 @@
           "category": "transport",
           "order": 9,
           "city": "Nara",
+          "scheduled_time": "08:30 - 10:45",
+          "pacing_note": "Transit from Koyasan to Nara (store luggage in locker)",
           "cost_eur": 9.0,
           "cost_jpy": null,
           "address": null,
@@ -1141,8 +1204,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Train to Nara",
-            "time_start": null,
-            "time_end": null
+            "time_start": "08:30",
+            "time_end": "10:45"
           }
         }
       ],
@@ -1184,6 +1247,8 @@
           "category": "restaurant",
           "order": 1,
           "city": "Kyoto",
+          "scheduled_time": "12:45 - 14:15",
+          "pacing_note": "Traditional claypot rice multi-course lunch",
           "cost_eur": 81.0,
           "cost_jpy": null,
           "address": "Japan, 〒605-0073 Kyoto, Higashiyama Ward, Gionmachi Kitagawa, 296 衹園",
@@ -1199,8 +1264,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Hachidaimei Gihey",
-            "time_start": null,
-            "time_end": null
+            "time_start": "12:45",
+            "time_end": "14:15"
           }
         },
         {
@@ -1209,6 +1274,8 @@
           "category": "attraction",
           "order": 2,
           "city": "Kyoto",
+          "scheduled_time": null,
+          "pacing_note": null,
           "cost_eur": 6.0,
           "cost_jpy": null,
           "address": "1 Chome-294 Kiyomizu, Higashiyama Ward, Kyoto, 605-0862, Japan",
@@ -1234,6 +1301,8 @@
           "category": "attraction",
           "order": 3,
           "city": "Kyoto",
+          "scheduled_time": null,
+          "pacing_note": null,
           "cost_eur": null,
           "cost_jpy": null,
           "address": null,
@@ -1259,6 +1328,8 @@
           "category": "attraction",
           "order": 4,
           "city": "Kyoto",
+          "scheduled_time": "09:45 - 10:45",
+          "pacing_note": "Morning visit to giant lion-head stage",
           "cost_eur": null,
           "cost_jpy": "Free",
           "address": "625 Gionmachi Kitagawa, Higashiyama Ward, Kyoto, 605-0073, Japan",
@@ -1278,8 +1349,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Yasaka Shrine",
-            "time_start": null,
-            "time_end": null
+            "time_start": "09:45",
+            "time_end": "10:45"
           }
         },
         {
@@ -1288,6 +1359,8 @@
           "category": "attraction",
           "order": 5,
           "city": "Kyoto",
+          "scheduled_time": null,
+          "pacing_note": null,
           "cost_eur": null,
           "cost_jpy": null,
           "address": null,
@@ -1313,6 +1386,8 @@
           "category": "attraction",
           "order": 6,
           "city": "Kyoto",
+          "scheduled_time": "09:30 - 10:45",
+          "pacing_note": "Quiet morning stroll through preserved streets",
           "cost_eur": null,
           "cost_jpy": "Free",
           "address": null,
@@ -1332,8 +1407,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Gion",
-            "time_start": null,
-            "time_end": null
+            "time_start": "09:30",
+            "time_end": "10:45"
           }
         }
       ],
@@ -1375,6 +1450,8 @@
           "category": "attraction",
           "order": 1,
           "city": "Kyoto",
+          "scheduled_time": null,
+          "pacing_note": null,
           "cost_eur": 6.0,
           "cost_jpy": null,
           "address": "62 Arashiyama Nakaoshitacho, Nishikyo Ward, Kyoto, 616-0004, Japan",
@@ -1400,6 +1477,8 @@
           "category": "attraction",
           "order": 2,
           "city": "Kyoto",
+          "scheduled_time": null,
+          "pacing_note": null,
           "cost_eur": 6.0,
           "cost_jpy": null,
           "address": "1 Kinkakujicho, Kita Ward, Kyoto, 603-8361, Japan",
@@ -1425,6 +1504,8 @@
           "category": "restaurant",
           "order": 3,
           "city": "Kyoto",
+          "scheduled_time": null,
+          "pacing_note": null,
           "cost_eur": 18.0,
           "cost_jpy": null,
           "address": "580 Nakanocho, Nakagyo Ward, Kyoto, 604-8042, Japan",
@@ -1450,6 +1531,8 @@
           "category": "attraction",
           "order": 4,
           "city": "Kyoto",
+          "scheduled_time": "12:00 - 13:15",
+          "pacing_note": "Snow monkeys & panoramic Kyoto overlook",
           "cost_eur": 9.22,
           "cost_jpy": "¥800",
           "address": "Japan, 〒616-0004 Kyoto, Nishikyo Ward, Arashiyama Nakaoshitacho, ６１",
@@ -1468,8 +1551,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Iwatayama Monkey Park",
-            "time_start": null,
-            "time_end": null
+            "time_start": "12:00",
+            "time_end": "13:15"
           }
         },
         {
@@ -1478,6 +1561,8 @@
           "category": "cafe",
           "order": 5,
           "city": "Kyoto",
+          "scheduled_time": "13:30 - 14:30",
+          "pacing_note": "Riverbank matcha soft serve & rest",
           "cost_eur": null,
           "cost_jpy": null,
           "address": "40番地18 Sagatenryuji Susukinobabacho, Ukyo Ward, Kyoto, 616-8385, Japan",
@@ -1493,8 +1578,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Matcha tea sweets",
-            "time_start": null,
-            "time_end": null
+            "time_start": "13:30",
+            "time_end": "14:30"
           }
         },
         {
@@ -1503,6 +1588,8 @@
           "category": "attraction",
           "order": 6,
           "city": "Kyoto",
+          "scheduled_time": null,
+          "pacing_note": null,
           "cost_eur": 12.0,
           "cost_jpy": null,
           "address": "Japan, 〒616-8385 Kyoto, Ukyo Ward, Sagatenryuji Susukinobabacho, ６８",
@@ -1528,6 +1615,8 @@
           "category": "attraction",
           "order": 7,
           "city": "Kyoto",
+          "scheduled_time": "07:30 - 08:45",
+          "pacing_note": "Early morning arrival to beat tour crowds",
           "cost_eur": null,
           "cost_jpy": "Free",
           "address": null,
@@ -1546,8 +1635,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Arashiyama Bamboo Forest",
-            "time_start": null,
-            "time_end": null
+            "time_start": "07:30",
+            "time_end": "08:45"
           }
         }
       ],
@@ -1589,6 +1678,8 @@
           "category": "attraction",
           "order": 1,
           "city": "Kyoto",
+          "scheduled_time": null,
+          "pacing_note": null,
           "cost_eur": null,
           "cost_jpy": null,
           "address": "３０番地 Shishigatani Goshonodancho, Sakyo Ward, Kyoto, 606-8422, Japan",
@@ -1614,6 +1705,8 @@
           "category": "attraction",
           "order": 2,
           "city": "Kyoto",
+          "scheduled_time": null,
+          "pacing_note": null,
           "cost_eur": null,
           "cost_jpy": null,
           "address": "68 Fukakusa Yabunouchicho, Fushimi Ward, Kyoto, 612-0882, Japan",
@@ -1639,6 +1732,8 @@
           "category": "attraction",
           "order": 3,
           "city": "Kyoto",
+          "scheduled_time": null,
+          "pacing_note": null,
           "cost_eur": 9.22,
           "cost_jpy": null,
           "address": "Nanzenji Fukuchicho, Sakyo Ward, Kyoto, 606-8435, Japan",
@@ -1664,6 +1759,8 @@
           "category": "attraction",
           "order": 4,
           "city": "Kyoto",
+          "scheduled_time": "16:30 - 17:30",
+          "pacing_note": "Relaxing twilight river stroll",
           "cost_eur": null,
           "cost_jpy": null,
           "address": null,
@@ -1679,8 +1776,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Evening walk by the Kamo River",
-            "time_start": null,
-            "time_end": null
+            "time_start": "16:30",
+            "time_end": "17:30"
           }
         },
         {
@@ -1689,6 +1786,8 @@
           "category": "restaurant",
           "order": 5,
           "city": "Kyoto",
+          "scheduled_time": "19:00 - 21:00",
+          "pacing_note": "Kyoto Japanese BBQ dinner",
           "cost_eur": 54.0,
           "cost_jpy": null,
           "address": "176-1 Zaimokucho, Nakagyo Ward, Kyoto, 604-8017, Japan",
@@ -1704,8 +1803,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Hiro Yakiniku",
-            "time_start": null,
-            "time_end": null
+            "time_start": "19:00",
+            "time_end": "21:00"
           }
         },
         {
@@ -1714,6 +1813,8 @@
           "category": "restaurant",
           "order": 6,
           "city": "Kyoto",
+          "scheduled_time": "17:45 - 18:45",
+          "pacing_note": "Atmospheric lantern-lit dining alley",
           "cost_eur": null,
           "cost_jpy": null,
           "address": null,
@@ -1729,8 +1830,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Pontocho",
-            "time_start": null,
-            "time_end": null
+            "time_start": "17:45",
+            "time_end": "18:45"
           }
         },
         {
@@ -1739,6 +1840,8 @@
           "category": "attraction",
           "order": 7,
           "city": "Kyoto",
+          "scheduled_time": "13:30 - 14:45",
+          "pacing_note": "Leisurely stone canal walking path",
           "cost_eur": null,
           "cost_jpy": "Free",
           "address": "Tetsugaku No Michi, Sakyo Ward, Kyoto, 606-8426, Japan",
@@ -1757,8 +1860,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Philosophers Path",
-            "time_start": null,
-            "time_end": null
+            "time_start": "13:30",
+            "time_end": "14:45"
           }
         }
       ],
@@ -1807,6 +1910,8 @@
           "category": "attraction",
           "order": 1,
           "city": "Kanazawa",
+          "scheduled_time": "15:00 - 16:15",
+          "pacing_note": "Minimalist Zen architecture & Water Mirror Garden",
           "cost_eur": 4.72,
           "cost_jpy": "¥310",
           "address": "Japan, 〒920-0964 Ishikawa, Kanazawa, Hondamachi, 3 Chome−4−20 鈴木大拙館",
@@ -1825,8 +1930,8 @@
             "synced": false,
             "event_id": null,
             "summary": "D.T. Suzuki Museum",
-            "time_start": null,
-            "time_end": null
+            "time_start": "15:00",
+            "time_end": "16:15"
           }
         },
         {
@@ -1835,6 +1940,8 @@
           "category": "restaurant",
           "order": 2,
           "city": "Kanazawa",
+          "scheduled_time": "13:00 - 14:30",
+          "pacing_note": "Explore Kanazawa's bustling seafood market",
           "cost_eur": null,
           "cost_jpy": "Free",
           "address": "50 Kamiomicho, Kanazawa, Ishikawa 920-0905, Japan",
@@ -1853,8 +1960,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Omicho Market",
-            "time_start": null,
-            "time_end": null
+            "time_start": "13:00",
+            "time_end": "14:30"
           }
         },
         {
@@ -1863,6 +1970,8 @@
           "category": "restaurant",
           "order": 3,
           "city": "Kanazawa",
+          "scheduled_time": "13:30 - 14:30",
+          "pacing_note": "Fresh Sea of Japan conveyor sushi lunch",
           "cost_eur": 40.0,
           "cost_jpy": null,
           "address": "88 Aokusamachi, Kanazawa, Ishikawa 920-0907, Japan",
@@ -1878,8 +1987,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Mori Mori Sushi",
-            "time_start": null,
-            "time_end": null
+            "time_start": "13:30",
+            "time_end": "14:30"
           }
         },
         {
@@ -1888,6 +1997,8 @@
           "category": "restaurant",
           "order": 4,
           "city": "Kanazawa",
+          "scheduled_time": "19:00 - 20:45",
+          "pacing_note": "Intimate sushi dinner by local masters",
           "cost_eur": 43.0,
           "cost_jpy": null,
           "address": "Japan, 〒920-0981 Ishikawa, Kanazawa, Katamachi, 1 Chome−5−26 Ｎｏ．１スクエア",
@@ -1903,8 +2014,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Sushi Ippei",
-            "time_start": null,
-            "time_end": null
+            "time_start": "19:00",
+            "time_end": "20:45"
           }
         },
         {
@@ -1913,6 +2024,8 @@
           "category": "attraction",
           "order": 5,
           "city": "Kanazawa",
+          "scheduled_time": "16:30 - 18:15",
+          "pacing_note": "Modern art & Leandro Erlich's Swimming Pool",
           "cost_eur": 21.52,
           "cost_jpy": "¥1,100 - ¥1,400 (Outer circle free)",
           "address": "1 Chome-2-1 Hirosaka, Kanazawa, Ishikawa 920-8509, Japan",
@@ -1931,8 +2044,8 @@
             "synced": false,
             "event_id": null,
             "summary": "21st Century of Contemporary Art Museum",
-            "time_start": null,
-            "time_end": null
+            "time_start": "16:30",
+            "time_end": "18:15"
           }
         },
         {
@@ -1941,6 +2054,8 @@
           "category": "transport",
           "order": 6,
           "city": "Kanazawa",
+          "scheduled_time": "09:40 - 11:50",
+          "pacing_note": "Scenic Limited Express ride past Lake Biwa",
           "cost_eur": 104.0,
           "cost_jpy": null,
           "address": null,
@@ -1956,8 +2071,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Thunderbird to Kanazawa",
-            "time_start": null,
-            "time_end": null
+            "time_start": "09:40",
+            "time_end": "11:50"
           }
         },
         {
@@ -1966,6 +2081,8 @@
           "category": "hotel",
           "order": 7,
           "city": "Kanazawa",
+          "scheduled_time": "12:15 - 13:00",
+          "pacing_note": "Check-in & drop luggage",
           "cost_eur": 163.0,
           "cost_jpy": null,
           "address": "10 Shimotsutsumicho, Kanazawa, Ishikawa 920-0917, Japan",
@@ -1981,8 +2098,8 @@
             "synced": false,
             "event_id": null,
             "summary": "The Square Hotel Kanazawa",
-            "time_start": null,
-            "time_end": null
+            "time_start": "12:15",
+            "time_end": "13:00"
           }
         }
       ],
@@ -2024,6 +2141,8 @@
           "category": "attraction",
           "order": 1,
           "city": "Kanazawa",
+          "scheduled_time": "12:30 - 14:15",
+          "pacing_note": "Japan's top garden with November Yukitsuri snow ropes",
           "cost_eur": 4.92,
           "cost_jpy": "¥320",
           "address": "1 Kenrokumachi, Kanazawa, Ishikawa 920-0936, Japan",
@@ -2043,8 +2162,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Kenrouken Garden",
-            "time_start": null,
-            "time_end": null
+            "time_start": "12:30",
+            "time_end": "14:15"
           }
         },
         {
@@ -2053,6 +2172,8 @@
           "category": "restaurant",
           "order": 2,
           "city": "Kanazawa",
+          "scheduled_time": "14:15 - 14:45",
+          "pacing_note": "Edible 24K gold leaf soft-serve ice cream",
           "cost_eur": 7.0,
           "cost_jpy": null,
           "address": "2-10 Kenrokumachi, Kanazawa, Ishikawa 920-0936, Japan",
@@ -2068,8 +2189,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Hakuichi",
-            "time_start": null,
-            "time_end": null
+            "time_start": "14:15",
+            "time_end": "14:45"
           }
         },
         {
@@ -2078,6 +2199,8 @@
           "category": "attraction",
           "order": 3,
           "city": "Kanazawa",
+          "scheduled_time": "11:00 - 12:15",
+          "pacing_note": "Feudal park grounds & reconstructed turrets",
           "cost_eur": null,
           "cost_jpy": "Free grounds (Turrets ¥320)",
           "address": "1-1 Marunouchi, Kanazawa, Ishikawa 920-0937, Japan",
@@ -2097,8 +2220,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Kanazawa Castle",
-            "time_start": null,
-            "time_end": null
+            "time_start": "11:00",
+            "time_end": "12:15"
           }
         },
         {
@@ -2107,6 +2230,8 @@
           "category": "attraction",
           "order": 4,
           "city": "Kanazawa",
+          "scheduled_time": "09:45 - 10:45",
+          "pacing_note": "Unique Dutch stained-glass gate & gardens",
           "cost_eur": null,
           "cost_jpy": null,
           "address": "11-1 Oyamamachi, Kanazawa, Ishikawa 920-0918, Japan",
@@ -2122,8 +2247,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Oyama Shrine",
-            "time_start": null,
-            "time_end": null
+            "time_start": "09:45",
+            "time_end": "10:45"
           }
         },
         {
@@ -2132,6 +2257,8 @@
           "category": "attraction",
           "order": 5,
           "city": "Kanazawa",
+          "scheduled_time": null,
+          "pacing_note": null,
           "cost_eur": null,
           "cost_jpy": null,
           "address": "1 Chome Higashiyama, Kanazawa, Ishikawa 920-0831, Japan",
@@ -2157,6 +2284,8 @@
           "category": "restaurant",
           "order": 6,
           "city": "Kanazawa",
+          "scheduled_time": "17:45 - 19:15",
+          "pacing_note": "Signature black miso ramen dinner",
           "cost_eur": 23.0,
           "cost_jpy": null,
           "address": "6-3 Horikawamachi, Kanazawa, Ishikawa 920-0847, Japan",
@@ -2172,8 +2301,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Ramen Taiga",
-            "time_start": null,
-            "time_end": null
+            "time_start": "17:45",
+            "time_end": "19:15"
           }
         },
         {
@@ -2182,6 +2311,8 @@
           "category": "attraction",
           "order": 7,
           "city": "Kanazawa",
+          "scheduled_time": "09:00 - 09:30",
+          "pacing_note": "Morning photo at Kanazawa Station's wooden drum gate",
           "cost_eur": null,
           "cost_jpy": "Free",
           "address": null,
@@ -2200,8 +2331,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Tsuzumimon Gate",
-            "time_start": null,
-            "time_end": null
+            "time_start": "09:00",
+            "time_end": "09:30"
           }
         }
       ],
@@ -2250,6 +2381,8 @@
           "category": "transport",
           "order": 1,
           "city": "Takayama",
+          "scheduled_time": "08:15 - 10:15",
+          "pacing_note": "Scenic Limited Express train into Japanese Alps",
           "cost_eur": 98.0,
           "cost_jpy": null,
           "address": null,
@@ -2265,8 +2398,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Train To Takayama",
-            "time_start": null,
-            "time_end": null
+            "time_start": "08:15",
+            "time_end": "10:15"
           }
         },
         {
@@ -2275,6 +2408,8 @@
           "category": "hotel",
           "order": 2,
           "city": "Takayama",
+          "scheduled_time": "18:30 onwards",
+          "pacing_note": "Ryokan check-in, open-air onsen bath & Kaiseki dinner",
           "cost_eur": 302.0,
           "cost_jpy": null,
           "address": "405 Okuhida Onsengo Kansaka, Takayama, Gifu 506-1421, Japan",
@@ -2290,7 +2425,7 @@
             "synced": false,
             "event_id": null,
             "summary": "Yukimurasaki Ryokan",
-            "time_start": null,
+            "time_start": "18:30 onwards",
             "time_end": null
           }
         },
@@ -2300,6 +2435,8 @@
           "category": "transport",
           "order": 3,
           "city": "Takayama",
+          "scheduled_time": "17:00 - 18:15",
+          "pacing_note": "Scenic mountain bus up to Okuhida hot springs",
           "cost_eur": 32.0,
           "cost_jpy": null,
           "address": null,
@@ -2315,8 +2452,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Bus to Okuhida Onsen",
-            "time_start": null,
-            "time_end": null
+            "time_start": "17:00",
+            "time_end": "18:15"
           }
         },
         {
@@ -2325,6 +2462,8 @@
           "category": "attraction",
           "order": 4,
           "city": "Takayama",
+          "scheduled_time": "15:00 - 16:30",
+          "pacing_note": "Traditional thatched gassho farmhouses",
           "cost_eur": 10.0,
           "cost_jpy": "¥700",
           "address": null,
@@ -2344,8 +2483,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Hida Folk Village",
-            "time_start": null,
-            "time_end": null
+            "time_start": "15:00",
+            "time_end": "16:30"
           }
         },
         {
@@ -2354,6 +2493,8 @@
           "category": "attraction",
           "order": 5,
           "city": "Takayama",
+          "scheduled_time": "13:30 - 14:30",
+          "pacing_note": "Edo-period provincial government headquarters",
           "cost_eur": 6.72,
           "cost_jpy": "¥440",
           "address": "Japan, 〒506-0012 Gifu, Takayama, Hachikenmachi, 1 Chome−２４−5",
@@ -2372,8 +2513,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Takayama Jinya",
-            "time_start": null,
-            "time_end": null
+            "time_start": "13:30",
+            "time_end": "14:30"
           }
         },
         {
@@ -2382,6 +2523,8 @@
           "category": "attraction",
           "order": 6,
           "city": "Takayama",
+          "scheduled_time": "10:30 - 11:30",
+          "pacing_note": "Riverside market stalls & local mountain crafts",
           "cost_eur": null,
           "cost_jpy": "Free",
           "address": "Shimosannomachi, Takayama, Gifu 506-0841, Japan",
@@ -2401,8 +2544,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Miyagawa Morning market",
-            "time_start": null,
-            "time_end": null
+            "time_start": "10:30",
+            "time_end": "11:30"
           }
         },
         {
@@ -2411,6 +2554,8 @@
           "category": "attraction",
           "order": 7,
           "city": "Takayama",
+          "scheduled_time": null,
+          "pacing_note": null,
           "cost_eur": null,
           "cost_jpy": null,
           "address": "Japan, 〒506-0846 Gifu, Takayama, Kamisannomachi, 20",
@@ -2470,6 +2615,8 @@
           "category": "attraction",
           "order": 1,
           "city": "Takayama",
+          "scheduled_time": "10:00 - 12:15",
+          "pacing_note": "Double-decker cable car into the Northern Alps",
           "cost_eur": 51.0,
           "cost_jpy": "¥3,800",
           "address": "710-7 Okuhida Onsengo Kansaka, Takayama, Gifu 506-1421, Japan",
@@ -2488,8 +2635,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Shinhotaka Ropeway",
-            "time_start": null,
-            "time_end": null
+            "time_start": "10:00",
+            "time_end": "12:15"
           }
         },
         {
@@ -2498,6 +2645,8 @@
           "category": "hotel",
           "order": 2,
           "city": "Tokyo",
+          "scheduled_time": "19:00 onwards",
+          "pacing_note": "Check-in at Tokyo base & relaxed evening",
           "cost_eur": 546.37,
           "cost_jpy": null,
           "address": "1 Chome-6-1 Nishiikebukuro, Toshima City, Tokyo 171-8505, Japan",
@@ -2513,7 +2662,7 @@
             "synced": false,
             "event_id": null,
             "summary": "Hotel Metropolitan Tokyo Ikebukuro",
-            "time_start": null,
+            "time_start": "19:00 onwards",
             "time_end": null
           }
         },
@@ -2523,6 +2672,8 @@
           "category": "transport",
           "order": 3,
           "city": "Takayama",
+          "scheduled_time": "14:00 - 18:30",
+          "pacing_note": "Transit to Toyama/Nagoya & bullet train to Tokyo",
           "cost_eur": 260.0,
           "cost_jpy": null,
           "address": null,
@@ -2538,8 +2689,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Shinkansen to Tokyo",
-            "time_start": null,
-            "time_end": null
+            "time_start": "14:00",
+            "time_end": "18:30"
           }
         },
         {
@@ -2548,6 +2699,8 @@
           "category": "attraction",
           "order": 4,
           "city": "Takayama",
+          "scheduled_time": "11:00 - 12:00",
+          "pacing_note": "360° summit views at 2,156m altitude",
           "cost_eur": null,
           "cost_jpy": null,
           "address": null,
@@ -2563,8 +2716,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Nishihotakaguchi Observation Deck",
-            "time_start": null,
-            "time_end": null
+            "time_start": "11:00",
+            "time_end": "12:00"
           }
         },
         {
@@ -2573,6 +2726,8 @@
           "category": "other",
           "order": 5,
           "city": "Takayama",
+          "scheduled_time": null,
+          "pacing_note": null,
           "cost_eur": null,
           "cost_jpy": null,
           "address": null,
@@ -2631,6 +2786,8 @@
           "category": "restaurant",
           "order": 1,
           "city": "Tokyo",
+          "scheduled_time": "19:00 - 21:00",
+          "pacing_note": "Omakase sushi dinner",
           "cost_eur": 140.0,
           "cost_jpy": null,
           "address": "3 Chome-21-3 Shibuya, Shibuya City, Tokyo 150-0002, Japan,",
@@ -2646,8 +2803,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Sushi Ten Tokyo Shibuya",
-            "time_start": null,
-            "time_end": null
+            "time_start": "19:00",
+            "time_end": "21:00"
           }
         },
         {
@@ -2656,6 +2813,8 @@
           "category": "attraction",
           "order": 2,
           "city": "Tokyo",
+          "scheduled_time": "16:45 - 18:30",
+          "pacing_note": "Golden hour sunset & illuminated night skyline",
           "cost_eur": 28.0,
           "cost_jpy": "¥2,500 online (¥2,800 same-day)",
           "address": "Japan, 〒150-6145 Tokyo, Shibuya City, Shibuya, 2 Chome−24−12, Shibuya Scramble Square, 14階・45階・46階・屋上",
@@ -2675,8 +2834,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Shibuya Sky",
-            "time_start": null,
-            "time_end": null
+            "time_start": "16:45",
+            "time_end": "18:30"
           }
         },
         {
@@ -2685,6 +2844,8 @@
           "category": "attraction",
           "order": 3,
           "city": "Tokyo",
+          "scheduled_time": "15:45 - 16:30",
+          "pacing_note": "World's busiest scramble crosswalk & Hachiko",
           "cost_eur": null,
           "cost_jpy": "Free",
           "address": "1-chōme-2-1 DōgenzakaShibuya City Tokyo 150-0043, Japan",
@@ -2704,8 +2865,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Shibuya Crossing",
-            "time_start": null,
-            "time_end": null
+            "time_start": "15:45",
+            "time_end": "16:30"
           }
         },
         {
@@ -2714,6 +2875,8 @@
           "category": "shopping",
           "order": 4,
           "city": "Tokyo",
+          "scheduled_time": "14:00 - 15:30",
+          "pacing_note": "Rooftop green lawn, cafes & Cat Street walk",
           "cost_eur": 25.0,
           "cost_jpy": "Free",
           "address": "6 Chome-20-10 Jingumae, Shibuya City, Tokyo 150-0001, Japan",
@@ -2733,8 +2896,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Miyashita Park",
-            "time_start": null,
-            "time_end": null
+            "time_start": "14:00",
+            "time_end": "15:30"
           }
         },
         {
@@ -2743,6 +2906,8 @@
           "category": "cafe",
           "order": 5,
           "city": "Tokyo",
+          "scheduled_time": "12:45 - 13:45",
+          "pacing_note": "Playful micro pig cafe experience",
           "cost_eur": 40.0,
           "cost_jpy": null,
           "address": "Japan, 〒150-0001 Tokyo, Shibuya City, Jingumae, 1 Chome−15−4 Barbizon76",
@@ -2758,8 +2923,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Mipig Cafe",
-            "time_start": null,
-            "time_end": null
+            "time_start": "12:45",
+            "time_end": "13:45"
           }
         },
         {
@@ -2768,6 +2933,8 @@
           "category": "shopping",
           "order": 6,
           "city": "Tokyo",
+          "scheduled_time": "11:15 - 12:30",
+          "pacing_note": "Takeshita Street & youth fashion boutiques",
           "cost_eur": null,
           "cost_jpy": "Free",
           "address": "Japan, 〒150-0001 Tokyo, Shibuya City, Jingumae, 1 Chome, 竹下通り",
@@ -2787,8 +2954,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Harajuku",
-            "time_start": null,
-            "time_end": null
+            "time_start": "11:15",
+            "time_end": "12:30"
           }
         },
         {
@@ -2797,6 +2964,8 @@
           "category": "attraction",
           "order": 7,
           "city": "Tokyo",
+          "scheduled_time": "09:30 - 11:00",
+          "pacing_note": "Tranquil morning walk through sacred evergreen forest",
           "cost_eur": null,
           "cost_jpy": "Free",
           "address": "1-1 Yoyogikamizonocho, Shibuya City, Tokyo 151-8557, Japan",
@@ -2816,8 +2985,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Meiji Shrine",
-            "time_start": null,
-            "time_end": null
+            "time_start": "09:30",
+            "time_end": "11:00"
           }
         }
       ],
@@ -2859,6 +3028,8 @@
           "category": "restaurant",
           "order": 1,
           "city": "Tokyo",
+          "scheduled_time": "21:15 - 22:30",
+          "pacing_note": "Conveyor belt sushi & capsule game fun",
           "cost_eur": 52.0,
           "cost_jpy": null,
           "address": null,
@@ -2874,8 +3045,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Kura Sushi",
-            "time_start": null,
-            "time_end": null
+            "time_start": "21:15",
+            "time_end": "22:30"
           }
         },
         {
@@ -2884,6 +3055,8 @@
           "category": "restaurant",
           "order": 2,
           "city": "Tokyo",
+          "scheduled_time": "16:00 - 17:30",
+          "pacing_note": "Memory Lane: charcoal yakitori under red lanterns",
           "cost_eur": 36.0,
           "cost_jpy": "¥2,000 - ¥4,000 per person",
           "address": "1 Chome-2 Nishishinjuku, Shinjuku City, Tokyo 160-0023, Japan",
@@ -2902,8 +3075,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Omoide Yokocho",
-            "time_start": null,
-            "time_end": null
+            "time_start": "16:00",
+            "time_end": "17:30"
           }
         },
         {
@@ -2912,6 +3085,8 @@
           "category": "attraction",
           "order": 3,
           "city": "Tokyo",
+          "scheduled_time": "17:45 - 19:15",
+          "pacing_note": "Shinjuku neon entertainment quarter & Godzilla head",
           "cost_eur": null,
           "cost_jpy": "Free",
           "address": null,
@@ -2930,8 +3105,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Kabukicho",
-            "time_start": null,
-            "time_end": null
+            "time_start": "17:45",
+            "time_end": "19:15"
           }
         },
         {
@@ -2940,6 +3115,8 @@
           "category": "attraction",
           "order": 4,
           "city": "Tokyo",
+          "scheduled_time": "14:30 - 15:15",
+          "pacing_note": "Watch the famous 3D giant calico cat",
           "cost_eur": null,
           "cost_jpy": null,
           "address": "Japan, 〒160-0022 Tokyo, Shinjuku City, Shinjuku, 3 Chome−23−18 RF 東新宿ビル クロス",
@@ -2955,8 +3132,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Cross Shinjuku Vision",
-            "time_start": null,
-            "time_end": null
+            "time_start": "14:30",
+            "time_end": "15:15"
           }
         },
         {
@@ -2965,6 +3142,8 @@
           "category": "restaurant",
           "order": 5,
           "city": "Tokyo",
+          "scheduled_time": "12:45 - 14:15",
+          "pacing_note": "Handcrafted artisan udon noodles lunch",
           "cost_eur": 23.0,
           "cost_jpy": null,
           "address": "Japan, 〒151-0053 Tokyo, Shibuya City, Yoyogi, 2 Chome−20−16 相馬ビル １F",
@@ -2980,8 +3159,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Udon Shin",
-            "time_start": null,
-            "time_end": null
+            "time_start": "12:45",
+            "time_end": "14:15"
           }
         },
         {
@@ -2990,6 +3169,8 @@
           "category": "attraction",
           "order": 6,
           "city": "Tokyo",
+          "scheduled_time": "19:30 - 21:00",
+          "pacing_note": "Historic maze of 200 intimate micro-bars",
           "cost_eur": null,
           "cost_jpy": "¥500 - ¥1,000 cover charge + drinks",
           "address": "Japan, 〒160-0021 Tokyo, Shinjuku City, Kabukicho, 1 Chome−1−6 2F",
@@ -3008,8 +3189,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Golden Gai",
-            "time_start": null,
-            "time_end": null
+            "time_start": "19:30",
+            "time_end": "21:00"
           }
         },
         {
@@ -3018,6 +3199,8 @@
           "category": "attraction",
           "order": 7,
           "city": "Tokyo",
+          "scheduled_time": "09:30 - 12:00",
+          "pacing_note": "Interactive digital art museum & water maze",
           "cost_eur": 50.0,
           "cost_jpy": "¥4,400",
           "address": "6 Chome-1-16 Toyosu, Koto City, Tokyo 135-0061, Japan",
@@ -3037,8 +3220,8 @@
             "synced": false,
             "event_id": null,
             "summary": "teamLab Planets",
-            "time_start": null,
-            "time_end": null
+            "time_start": "09:30",
+            "time_end": "12:00"
           }
         }
       ],
@@ -3080,6 +3263,8 @@
           "category": "restaurant",
           "order": 1,
           "city": "Tokyo",
+          "scheduled_time": "18:30 - 20:30",
+          "pacing_note": "Gourmet dining hall dinner",
           "cost_eur": 87.0,
           "cost_jpy": null,
           "address": "Japan, 〒105-6403 Tokyo, Minato City, Toranomon, 1 Chome−17−1, Toranomon Hills Business Tower, 3F",
@@ -3095,8 +3280,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Toranomon Yokocho",
-            "time_start": null,
-            "time_end": null
+            "time_start": "18:30",
+            "time_end": "20:30"
           }
         },
         {
@@ -3105,6 +3290,8 @@
           "category": "attraction",
           "order": 2,
           "city": "Tokyo",
+          "scheduled_time": "16:15 - 18:00",
+          "pacing_note": "Observation deck & twilight view of Tokyo",
           "cost_eur": 39.0,
           "cost_jpy": "¥1,200 (Main Deck) / ¥3,000 (Top Deck Tour)",
           "address": "4 Chome-2-8 Shibakoen, Minato City, Tokyo 105-0011, Japan",
@@ -3124,8 +3311,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Tokyo Tower",
-            "time_start": null,
-            "time_end": null
+            "time_start": "16:15",
+            "time_end": "18:00"
           }
         },
         {
@@ -3134,6 +3321,8 @@
           "category": "attraction",
           "order": 3,
           "city": "Tokyo",
+          "scheduled_time": "14:30 - 15:30",
+          "pacing_note": "Classic Japanese arcades & claw games",
           "cost_eur": 10.0,
           "cost_jpy": null,
           "address": null,
@@ -3149,8 +3338,8 @@
             "synced": false,
             "event_id": null,
             "summary": "GiGO Arcade",
-            "time_start": null,
-            "time_end": null
+            "time_start": "14:30",
+            "time_end": "15:30"
           }
         },
         {
@@ -3159,6 +3348,8 @@
           "category": "shopping",
           "order": 4,
           "city": "Tokyo",
+          "scheduled_time": "21:30 - 22:45",
+          "pacing_note": "Ebisu Ferris wheel & late souvenir shopping",
           "cost_eur": 25.0,
           "cost_jpy": "¥600 for Ferris wheel",
           "address": null,
@@ -3177,8 +3368,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Don Quijote Akihabara",
-            "time_start": null,
-            "time_end": null
+            "time_start": "21:30",
+            "time_end": "22:45"
           }
         },
         {
@@ -3187,6 +3378,8 @@
           "category": "shopping",
           "order": 5,
           "city": "Tokyo",
+          "scheduled_time": "12:30 - 13:30",
+          "pacing_note": "Multi-floor anime & hobby merchandise",
           "cost_eur": 20.0,
           "cost_jpy": null,
           "address": null,
@@ -3202,8 +3395,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Radio Kaikan",
-            "time_start": null,
-            "time_end": null
+            "time_start": "12:30",
+            "time_end": "13:30"
           }
         },
         {
@@ -3212,6 +3405,8 @@
           "category": "shopping",
           "order": 6,
           "city": "Tokyo",
+          "scheduled_time": "11:30 - 12:30",
+          "pacing_note": "Electric Town street atmosphere",
           "cost_eur": 30.0,
           "cost_jpy": "Free",
           "address": null,
@@ -3231,8 +3426,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Akihabara",
-            "time_start": null,
-            "time_end": null
+            "time_start": "11:30",
+            "time_end": "12:30"
           }
         },
         {
@@ -3241,6 +3436,8 @@
           "category": "attraction",
           "order": 7,
           "city": "Tokyo",
+          "scheduled_time": null,
+          "pacing_note": null,
           "cost_eur": null,
           "cost_jpy": null,
           "address": "2 Chome-3-1 Asakusa, Taito City, Tokyo 111-0032, Japan",
@@ -3293,6 +3490,8 @@
           "category": "flight",
           "order": 1,
           "city": "Tokyo",
+          "scheduled_time": "15:45 - 17:00",
+          "pacing_note": "Landing at Haneda Airport, customs & transit",
           "cost_eur": 893.81,
           "cost_jpy": null,
           "address": null,
@@ -3308,8 +3507,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Flight",
-            "time_start": null,
-            "time_end": null
+            "time_start": "15:45",
+            "time_end": "17:00"
           }
         },
         {
@@ -3318,6 +3517,8 @@
           "category": "transport",
           "order": 2,
           "city": "Tokyo",
+          "scheduled_time": "13:00 - 13:45",
+          "pacing_note": "Transit to Haneda International Terminal 3",
           "cost_eur": 7.0,
           "cost_jpy": null,
           "address": null,
@@ -3333,8 +3534,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Train to Haneda Airport",
-            "time_start": null,
-            "time_end": null
+            "time_start": "13:00",
+            "time_end": "13:45"
           }
         },
         {
@@ -3343,6 +3544,8 @@
           "category": "shopping",
           "order": 3,
           "city": "Tokyo",
+          "scheduled_time": "10:00 - 12:30",
+          "pacing_note": "Souvenirs at Tokyo Station / Daimaru depachika",
           "cost_eur": null,
           "cost_jpy": null,
           "address": null,
@@ -3358,8 +3561,8 @@
             "synced": false,
             "event_id": null,
             "summary": "Last Minute Shopping",
-            "time_start": null,
-            "time_end": null
+            "time_start": "10:00",
+            "time_end": "12:30"
           }
         }
       ],

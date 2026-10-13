@@ -936,6 +936,147 @@ GUIDEBOOK_DATA = {
     }
 }
 
+# Schedule database for realistic, relaxed activity timing (accounting for transit & sunset)
+ACTIVITY_SCHEDULES = {
+    # Day 1: Nov 9 - Arrival
+    "flight tokyo": ("15:45 - 17:00", "Landing at Haneda Airport, customs & transit"),
+    "hotel toyoko inn": ("17:30 - 18:30", "Check-in, unpack & settle in"),
+    
+    # Day 2: Nov 10 - Osaka
+    "train from tokyo to osaka": ("10:15 - 12:45", "Tokaido Shinkansen bullet train (Mt. Fuji views)"),
+    "hotel hillarys shinsaibashi": ("13:15 - 14:00", "Check-in & drop luggage"),
+    "kuromon market": ("14:15 - 15:45", "Late lunch & fresh seafood street market"),
+    "shinsaibashi shopping street": ("16:00 - 17:15", "Leisurely stroll through covered arcade"),
+    "glico man": ("17:30 - 18:00", "Sunset photo with iconic running man"),
+    "dotonbori": ("18:00 - 19:00", "Canal walk as neon billboards light up"),
+    "try street food in dotonbori": ("19:00 - 20:00", "Takoyaki & casual evening bites"),
+    "shinsekai": ("20:15 - 21:30", "Retro neon district & Tsutenkaku Tower"),
+    "torikizoku": ("21:30 - 22:45", "Yakitori dinner & relaxed drinks"),
+
+    # Day 3: Nov 11 - Osaka
+    "namba yasaka shrine": ("09:45 - 10:45", "Morning visit to giant lion-head stage"),
+    "osaka castle": ("11:15 - 13:30", "Castle museum, stone ramparts & park grounds"),
+    "fukutaro": ("13:45 - 15:00", "Relaxed okonomiyaki lunch"),
+    "america-mura": ("15:15 - 16:45", "Youth fashion, vintage shops & Triangle Park"),
+    "umeda sky building": ("17:15 - 19:00", "Floating Garden sunset (~16:45) & night skyline"),
+    "snacks from convenience stores in osaka": ("19:15 - 19:45", "Quick konbini snack break"),
+    "ichiran ramen": ("20:00 - 21:15", "Cozy tonkotsu ramen dinner"),
+    "don quijote": ("21:30 - 22:45", "Ebisu Ferris wheel & late souvenir shopping"),
+
+    # Day 4: Nov 12 - Koyasan
+    "train to koyasan": ("09:00 - 10:45", "Nankai Limited Express + scenic cable car"),
+    "koyasan shukubo daienin": ("11:00 - 11:45", "Temple check-in & drop daypacks"),
+    "daimon gate": ("12:00 - 12:45", "Grand entrance gate to Mount Koya"),
+    "danjo garan complex": ("13:00 - 14:15", "Konpon Daito Pagoda & sacred halls"),
+    "kongobu-ji": ("14:30 - 15:45", "Banryutei dragon rock garden & sliding screens"),
+    "reihokan museum": ("16:00 - 17:00", "Treasures, sacred mandalas & Buddhist art"),
+    "temple meal at saizen-in": ("17:30 - 19:00", "Traditional Shojin Ryori vegetarian dinner"),
+    "okunoin cemetery": ("19:15 - 20:45", "Atmospheric lantern walk through ancient cedars"),
+
+    # Day 5: Nov 13 - Nara
+    "train to nara": ("08:30 - 10:45", "Transit from Koyasan to Nara (store luggage in locker)"),
+    "nakatanidou": ("11:00 - 11:45", "High-speed mochi pounding show & warm mochi"),
+    "isui-en garden": ("12:00 - 13:15", "Tranquil stroll through Edo-period pond garden"),
+    "parco okonomiyaki": ("13:30 - 14:45", "Relaxed lunch at cozy local shop"),
+    "todai-ji": ("15:00 - 16:30", "Great Bronze Buddha & Nigatsu-do veranda panorama"),
+    "nara park": ("16:30 - 17:15", "Interacting with friendly deer in afternoon light"),
+    "katsuga taisha": ("17:15 - 18:00", "Lantern-lined shrine in the peaceful forest"),
+    "train to kyoto": ("18:15 - 19:15", "Retrieve bags & scenic train to Kyoto"),
+    "piece hostel sanjo": ("19:30 onwards", "Check-in at Kyoto base & rest"),
+
+    # Day 6: Nov 14 - Kyoto (Gion & Higashiyama)
+    "gion": ("09:30 - 10:45", "Quiet morning stroll through preserved streets"),
+    "hanami-koji": ("10:45 - 11:30", "Historic teahouse lane"),
+    "yasaka shrine": ("11:30 - 12:30", "Vibrant Gion guardian shrine grounds"),
+    "hachidaimei gihey": ("12:45 - 14:15", "Traditional claypot rice multi-course lunch"),
+    "ninenzaka & sannenzaka": ("14:30 - 16:00", "Cobbled merchant slopes & artisan pottery shops"),
+    "kiyomizu-dera": ("16:15 - 18:30", "Historic wooden stage, sunset & autumn night light-up"),
+
+    # Day 7: Nov 15 - Kyoto (Arashiyama & Kinkaku-ji)
+    "arashiyama bamboo forest": ("07:30 - 08:45", "Early morning arrival to beat tour crowds"),
+    "tenryu-ji": ("09:00 - 10:15", "UNESCO Zen temple & mountain-view garden"),
+    "senko-ji temple": ("10:30 - 11:45", "Secluded hillside temple with river overlook"),
+    "iwatayama monkey park": ("12:00 - 13:15", "Snow monkeys & panoramic Kyoto overlook"),
+    "matcha tea sweets": ("13:30 - 14:30", "Riverbank matcha soft serve & rest"),
+    "kinkaku-ji": ("15:15 - 16:45", "Golden Pavilion reflecting in the autumn pond"),
+    "ramen sen-no-kaze": ("18:00 - 19:30", "Miso ramen set dinner"),
+
+    # Day 8: Nov 16 - Kyoto (Fushimi Inari, Nanzen-ji & Pontocho)
+    "fushimi-inari": ("08:30 - 11:00", "Hike through vermilion Torii gates to Yotsutsuji"),
+    "nanzen-ji temple": ("11:45 - 13:15", "Zen complex & Suirokaku Roman-style aqueduct"),
+    "philosophers path": ("13:30 - 14:45", "Leisurely stone canal walking path"),
+    "honen-in": ("14:45 - 15:45", "Thatched gate & serene moss garden sanctuary"),
+    "evening walk by the kamo river": ("16:30 - 17:30", "Relaxing twilight river stroll"),
+    "pontocho": ("17:45 - 18:45", "Atmospheric lantern-lit dining alley"),
+    "hiro yakiniku": ("19:00 - 21:00", "Kyoto Japanese BBQ dinner"),
+
+    # Day 9: Nov 17 - Kanazawa
+    "thunderbird to kanazawa": ("09:40 - 11:50", "Scenic Limited Express ride past Lake Biwa"),
+    "the square hotel kanazawa": ("12:15 - 13:00", "Check-in & drop luggage"),
+    "omicho market": ("13:00 - 14:30", "Explore Kanazawa's bustling seafood market"),
+    "mori mori sushi": ("13:30 - 14:30", "Fresh Sea of Japan conveyor sushi lunch"),
+    "d.t. suzuki museum": ("15:00 - 16:15", "Minimalist Zen architecture & Water Mirror Garden"),
+    "21st century of contemporary art museum": ("16:30 - 18:15", "Modern art & Leandro Erlich's Swimming Pool"),
+    "sushi ippei": ("19:00 - 20:45", "Intimate sushi dinner by local masters"),
+
+    # Day 10: Nov 18 - Kanazawa
+    "tsuzumimon gate": ("09:00 - 09:30", "Morning photo at Kanazawa Station's wooden drum gate"),
+    "oyama shrine": ("09:45 - 10:45", "Unique Dutch stained-glass gate & gardens"),
+    "kanazawa castle": ("11:00 - 12:15", "Feudal park grounds & reconstructed turrets"),
+    "kenrouken garden": ("12:30 - 14:15", "Japan's top garden with November Yukitsuri snow ropes"),
+    "hakuichi": ("14:15 - 14:45", "Edible 24K gold leaf soft-serve ice cream"),
+    "higashi-chaya": ("15:15 - 17:15", "Preserved historic geisha teahouse district"),
+    "ramen taiga": ("17:45 - 19:15", "Signature black miso ramen dinner"),
+
+    # Day 11: Nov 19 - Takayama & Okuhida
+    "train to takayama": ("08:15 - 10:15", "Scenic Limited Express train into Japanese Alps"),
+    "miyagawa morning market": ("10:30 - 11:30", "Riverside market stalls & local mountain crafts"),
+    "sanmachi-suji": ("11:45 - 13:15", "Old merchant streets, sake tasting & A5 Hida beef"),
+    "takayama jinya": ("13:30 - 14:30", "Edo-period provincial government headquarters"),
+    "hida folk village": ("15:00 - 16:30", "Traditional thatched gassho farmhouses"),
+    "bus to okuhida onsen": ("17:00 - 18:15", "Scenic mountain bus up to Okuhida hot springs"),
+    "yukimurasaki ryokan": ("18:30 onwards", "Ryokan check-in, open-air onsen bath & Kaiseki dinner"),
+
+    # Day 12: Nov 20 - Takayama -> Tokyo
+    "morning onsen & breakfast before checking out": ("08:00 - 09:30", "Unhurried breakfast & final morning onsen soak"),
+    "shinhotaka ropeway": ("10:00 - 12:15", "Double-decker cable car into the Northern Alps"),
+    "nishihotakaguchi observation deck": ("11:00 - 12:00", "360° summit views at 2,156m altitude"),
+    "shinkansen to tokyo": ("14:00 - 18:30", "Transit to Toyama/Nagoya & bullet train to Tokyo"),
+    "hotel metropolitan tokyo ikebukuro": ("19:00 onwards", "Check-in at Tokyo base & relaxed evening"),
+
+    # Day 13: Nov 21 - Tokyo (Shibuya & Harajuku)
+    "meiji shrine": ("09:30 - 11:00", "Tranquil morning walk through sacred evergreen forest"),
+    "harajuku": ("11:15 - 12:30", "Takeshita Street & youth fashion boutiques"),
+    "mipig cafe": ("12:45 - 13:45", "Playful micro pig cafe experience"),
+    "miyashita park": ("14:00 - 15:30", "Rooftop green lawn, cafes & Cat Street walk"),
+    "shibuya crossing": ("15:45 - 16:30", "World's busiest scramble crosswalk & Hachiko"),
+    "shibuya sky": ("16:45 - 18:30", "Golden hour sunset & illuminated night skyline"),
+    "sushi ten tokyo shibuya": ("19:00 - 21:00", "Omakase sushi dinner"),
+
+    # Day 14: Nov 22 - Tokyo (Toyosu & Shinjuku)
+    "teamlab planets": ("09:30 - 12:00", "Interactive digital art museum & water maze"),
+    "udon shin": ("12:45 - 14:15", "Handcrafted artisan udon noodles lunch"),
+    "cross shinjuku vision": ("14:30 - 15:15", "Watch the famous 3D giant calico cat"),
+    "omoide yokocho": ("16:00 - 17:30", "Memory Lane: charcoal yakitori under red lanterns"),
+    "kabukicho": ("17:45 - 19:15", "Shinjuku neon entertainment quarter & Godzilla head"),
+    "golden gai": ("19:30 - 21:00", "Historic maze of 200 intimate micro-bars"),
+    "kura sushi": ("21:15 - 22:30", "Conveyor belt sushi & capsule game fun"),
+
+    # Day 15: Nov 23 - Tokyo (Asakusa, Akihabara & Tokyo Tower)
+    "senso-ji temple": ("09:00 - 11:00", "Tokyo's oldest Buddhist temple & Nakamise-dori"),
+    "akihabara": ("11:30 - 12:30", "Electric Town street atmosphere"),
+    "radio kaikan": ("12:30 - 13:30", "Multi-floor anime & hobby merchandise"),
+    "don quijote akihabara": ("13:30 - 14:30", "Discount megastore shopping"),
+    "gigo arcade": ("14:30 - 15:30", "Classic Japanese arcades & claw games"),
+    "tokyo tower": ("16:15 - 18:00", "Observation deck & twilight view of Tokyo"),
+    "toranomon yokocho": ("18:30 - 20:30", "Gourmet dining hall dinner"),
+
+    # Day 16: Nov 24 - Departure
+    "last minute shopping": ("10:00 - 12:30", "Souvenirs at Tokyo Station / Daimaru depachika"),
+    "train to haneda airport": ("13:00 - 13:45", "Transit to Haneda International Terminal 3"),
+    "flight": ("16:00 onwards", "Check-in, Duty Free browsing & departure flight")
+}
+
 def normalize_key(name):
     """Normalize names for dictionary matching."""
     s = name.lower()
@@ -965,24 +1106,17 @@ def main():
             
     # Group rows by Day
     day_groups = {}
-    summary_items = []
     
     # Map day label to date
-    # Format of day: 'Nov 9 - Arrival', 'Nov 10 - Osaka', ..., 'Nov 24 - Departure'
     for r in rows:
         day_str = r['Day'].strip()
-        if not day_str:
-            summary_items.append(r)
+        if not day_str or 'ic card' in r['Name'].lower():
+            # Skip unassigned summary budget rows
             continue
         if day_str not in day_groups:
             day_groups[day_str] = []
         day_groups[day_str].append(r)
 
-    # Build days list
-    # We will infer day_index 1..16 from Nov 9..Nov 24
-    month_name = "Nov"
-    year = 2026
-    
     days_output = []
     day_counter = 0
 
@@ -990,7 +1124,6 @@ def main():
         day_counter += 1
         
         # Parse day number and city/subtitle from day_str
-        # e.g. "Nov 9 - Arrival", "Nov 10 - Osaka"
         m = re.match(r'Nov\s+(\d+)\s*-\s*(.*)', day_str)
         if m:
             day_num_day = int(m.group(1))
@@ -1035,6 +1168,15 @@ def main():
                 if g_key in norm or norm in g_key:
                     guidebook_match = g_val
                     break
+
+            # Lookup realistic activity scheduled time
+            sched_time = None
+            pacing_note = None
+            for s_key, s_val in ACTIVITY_SCHEDULES.items():
+                if s_key in norm or norm in s_key:
+                    sched_time = s_val[0]
+                    pacing_note = s_val[1]
+                    break
                     
             eur_val = clean_cost(it['Cost'])
             
@@ -1044,6 +1186,8 @@ def main():
                 "category": activity_type.lower() if activity_type else "other",
                 "order": item_order,
                 "city": it['City'].strip() or primary_city,
+                "scheduled_time": sched_time,
+                "pacing_note": pacing_note,
                 "cost_eur": eur_val,
                 "cost_jpy": guidebook_match.get("price_jpy") if guidebook_match else None,
                 "address": it['Address'].strip() or None,
@@ -1059,8 +1203,8 @@ def main():
                     "synced": False,
                     "event_id": None,
                     "summary": raw_name,
-                    "time_start": None,
-                    "time_end": None
+                    "time_start": sched_time.split(" - ")[0] if sched_time and " - " in sched_time else sched_time,
+                    "time_end": sched_time.split(" - ")[1] if sched_time and " - " in sched_time else None
                 }
             }
             day_items.append(item_obj)
@@ -1083,7 +1227,7 @@ def main():
         }
         days_output.append(day_obj)
 
-    # Master structure
+    # Master structure (Budget section removed)
     master = {
         "metadata": {
             "trip_name": "Japan Autumn Discovery 2026",
@@ -1092,16 +1236,7 @@ def main():
             "end_date": "2026-11-24",
             "total_days": len(days_output),
             "timezone": "Asia/Tokyo",
-            "generated_at": datetime.utcnow().isoformat() + "Z",
-            "currency": "EUR",
-            "summary_expenses": [
-                {
-                    "title": s['Name'].strip(),
-                    "category": s['Activity'].strip(),
-                    "cost_eur": clean_cost(s['Cost']),
-                    "notes": s['Details'].strip()
-                } for s in summary_items
-            ]
+            "generated_at": datetime.utcnow().isoformat() + "Z"
         },
         "days": days_output,
         "travel_handbook": {
@@ -1136,7 +1271,8 @@ def main():
     with open(out_file, 'w', encoding='utf-8') as f:
         json.dump(master, f, ensure_ascii=False, indent=2)
 
-    print(f"Successfully created {out_file} with {len(days_output)} days and enriched guidebook data!")
+    print(f"Successfully created {out_file} with {len(days_output)} days, scheduled activity times, and removed budget section!")
 
 if __name__ == "__main__":
     main()
+
