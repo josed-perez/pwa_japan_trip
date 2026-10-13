@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Japan 2026">
+  <meta name="theme-color" content="#0b0f19">
+  <title>Japan Trip 2026 - Itinerary & Guide</title>
+  
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Fixed Header -->
+  <header class="app-header">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-flag"></div>
+        <h1 class="brand-title">Japan 2026</h1>
+      </div>
+      <div class="header-actions">
+        <button id="sync-status-btn" class="sync-badge-btn" title="Sync with Google Calendar">
+          📅 Sync Calendar
+        </button>
+        <button id="handbook-btn" class="btn-icon" title="Travel Handbook">
+          📖
+        </button>
+      </div>
+    </div>
+
+    <!-- Horizontal Day Scroller -->
+    <div class="days-nav-container">
+      <nav id="days-nav" class="days-nav">
+        <!-- Rendered dynamically -->
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main View -->
+  <main class="main-container">
+    <!-- Category Filter Bar -->
+    <div class="filter-bar">
+      <button class="filter-chip active" data-filter="all">All Items</button>
+      <button class="filter-chip" data-filter="attraction">⛩️ Sights</button>
+      <button class="filter-chip" data-filter="restaurant">🍜 Food & Drink</button>
+      <button class="filter-chip" data-filter="transport">🚄 Transit</button>
+      <button class="filter-chip" data-filter="shopping">🛍️ Shopping</button>
+    </div>
+
+    <!-- Active Day Schedule & Enriched Details -->
+    <div id="day-content">
+      <!-- Rendered dynamically via app.js -->
+    </div>
+  </main>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <button class="nav-tab active" data-tab="itinerary">
+      <span class="tab-icon">🗺️</span>
+      <span>Itinerary</span>
+    </button>
+    <button class="nav-tab" data-tab="sync">
+      <span class="tab-icon">📅</span>
+      <span>G-Calendar</span>
+    </button>
+    <button class="nav-tab" data-tab="guide">
+      <span class="tab-icon">📖</span>
+      <span>Handbook</span>
+    </button>
+    <button class="nav-tab" data-tab="budget">
+      <span class="tab-icon">💰</span>
+      <span>Budget</span>
+    </button>
+  </nav>
+
+  <!-- Calendar Sync Modal -->
+  <div id="calendar-modal" class="modal-overlay">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <h3 class="modal-title">Sync Google Calendar</h3>
+        <button class="btn-close">&times;</button>
+      </div>
+
+      <p style="font-size: 0.84rem; color: #cbd5e1; margin-bottom: 16px;">
+        Synchronize your flights, train reservations, and bookings. All synced events are saved directly into your device's offline storage.
+      </p>
+
+      <!-- Quick 1-Click Sync for your flights & trains -->
+      <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid #059669; border-radius: var(--radius-sm); padding: 12px; margin-bottom: 16px;">
+        <strong style="color: #6ee7b7; font-size: 0.88rem; display: block; margin-bottom: 4px;">⚡ Instant Trip Schedule Sync</strong>
+        <p style="font-size: 0.78rem; color: #a7f3d0; margin-bottom: 10px;">
+          Automatically populates your Haneda flights, Tokaido Shinkansen, Nankai Koya train, and Hokuriku bullet trains with reserved times.
+        </p>
+        <button id="btn-oneclick-sync" class="btn-primary" style="background: linear-gradient(135deg, #059669, #047857);">
+          ⚡ Sync Trip Flights & Trains
+        </button>
+      </div>
+
+      <!-- Option 2: Upload ICS File -->
+      <div class="form-group">
+        <label class="form-label">📂 Import from .ics Calendar File</label>
+        <input type="file" id="ics-file-input" accept=".ics,text/calendar" class="form-input" style="padding: 8px;">
+        <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 4px;">
+          Export your Google Calendar as a <code>.ics</code> file and select it here. Works completely offline.
+        </div>
+      </div>
+
+      <!-- Option 3: Private Calendar URL -->
+      <div class="form-group">
+        <label class="form-label">🔗 Or Paste Secret Google Calendar iCal URL</label>
+        <input type="url" id="ics-url-input" class="form-input" placeholder="https://calendar.google.com/calendar/ical/.../basic.ics">
+        <button id="btn-sync-url" class="btn-secondary">Fetch & Sync Feed</button>
+      </div>
+
+      <div style="margin-top: 14px; font-size: 0.75rem; color: #64748b; line-height: 1.4;">
+        🔒 <strong>Privacy note:</strong> All events are stored purely locally inside your browser (IndexedDB / LocalStorage). No data is sent to any external server.
+      </div>
+    </div>
+  </div>
+
+  <!-- Handbook / Budget Modal -->
+  <div id="handbook-modal" class="modal-overlay">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <h3 id="handbook-modal-title" class="modal-title">📖 Travel Handbook</h3>
+        <button class="btn-close">&times;</button>
+      </div>
+      <div id="handbook-content">
+        <!-- Injected dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
