@@ -8,11 +8,28 @@ adds curated location-tailored recommendations, and outputs master_itinerary.jso
 import csv
 import json
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 
 # Curated location-tailored recommendations by Day & City
 TAILORED_RECOMMENDATIONS = {
-    1: { # Nov 10 - Osaka
+    1: { # Nov 9 - Tokyo Arrival
+        "neighborhood": "Nihombashi & Ningyocho",
+        "highlights": [
+            {
+                "title": "Ningyocho Historic Karakuri Clock Towers",
+                "category": "Neighborhood Walk",
+                "description": "Just down the street from Toyoko Inn Nihombashi Kakigaracho. Traditional mechanical puppet clock towers perform charming Edo-period scenes on the hour until 19:00.",
+                "maps_query": "Ningyocho Karakuri Clock Tower Tokyo"
+            },
+            {
+                "title": "Comfort Konbini Arrival Snack",
+                "category": "Konbini Treat",
+                "description": "Pick up Japan's legendary soft egg sandwich, onigiri, and hot bottled roasted green tea from the warming cabinet to settle in comfortably after your long flight.",
+                "maps_query": "7-Eleven Nihombashi Kakigaracho Tokyo"
+            }
+        ]
+    },
+    2: { # Nov 10 - Osaka
         "neighborhood": "Shinsaibashi & Dotonbori",
         "highlights": [
             {
@@ -35,7 +52,7 @@ TAILORED_RECOMMENDATIONS = {
             }
         ]
     },
-    2: { # Nov 11 - Osaka
+    3: { # Nov 11 - Osaka
         "neighborhood": "Osaka Castle, Amerikamura & Umeda",
         "highlights": [
             {
@@ -58,7 +75,7 @@ TAILORED_RECOMMENDATIONS = {
             }
         ]
     },
-    3: { # Nov 12 - Koyasan
+    4: { # Nov 12 - Koyasan
         "neighborhood": "Mount Koya (Wakayama)",
         "highlights": [
             {
@@ -81,7 +98,7 @@ TAILORED_RECOMMENDATIONS = {
             }
         ]
     },
-    4: { # Nov 13 - Nara
+    5: { # Nov 13 - Nara
         "neighborhood": "Nara Park & Naramachi",
         "highlights": [
             {
@@ -104,7 +121,7 @@ TAILORED_RECOMMENDATIONS = {
             }
         ]
     },
-    5: { # Nov 14 - Kyoto
+    6: { # Nov 14 - Kyoto
         "neighborhood": "Gion & Southern Higashiyama",
         "highlights": [
             {
@@ -127,7 +144,7 @@ TAILORED_RECOMMENDATIONS = {
             }
         ]
     },
-    6: { # Nov 15 - Kyoto
+    7: { # Nov 15 - Kyoto
         "neighborhood": "Arashiyama & Northern Kyoto",
         "highlights": [
             {
@@ -150,7 +167,7 @@ TAILORED_RECOMMENDATIONS = {
             }
         ]
     },
-    7: { # Nov 16 - Kyoto
+    8: { # Nov 16 - Kyoto
         "neighborhood": "Fushimi Inari, Nanzen-ji & Pontocho",
         "highlights": [
             {
@@ -173,7 +190,7 @@ TAILORED_RECOMMENDATIONS = {
             }
         ]
     },
-    8: { # Nov 17 - Kanazawa
+    9: { # Nov 17 - Kanazawa
         "neighborhood": "Omicho & Hirosaka",
         "highlights": [
             {
@@ -196,7 +213,7 @@ TAILORED_RECOMMENDATIONS = {
             }
         ]
     },
-    9: { # Nov 18 - Kanazawa
+    10: { # Nov 18 - Kanazawa
         "neighborhood": "Kenroku-en, Castle & Higashi Chaya",
         "highlights": [
             {
@@ -219,7 +236,7 @@ TAILORED_RECOMMENDATIONS = {
             }
         ]
     },
-    10: { # Nov 19 - Takayama
+    11: { # Nov 19 - Takayama
         "neighborhood": "Sanmachi-suji Old Town & Okuhida",
         "highlights": [
             {
@@ -242,7 +259,7 @@ TAILORED_RECOMMENDATIONS = {
             }
         ]
     },
-    11: { # Nov 20 - Takayama & Tokyo
+    12: { # Nov 20 - Takayama & Tokyo
         "neighborhood": "Okuhida Alps & Ikebukuro",
         "highlights": [
             {
@@ -259,7 +276,7 @@ TAILORED_RECOMMENDATIONS = {
             }
         ]
     },
-    12: { # Nov 21 - Tokyo
+    13: { # Nov 21 - Tokyo
         "neighborhood": "Shibuya & Harajuku",
         "highlights": [
             {
@@ -282,7 +299,7 @@ TAILORED_RECOMMENDATIONS = {
             }
         ]
     },
-    13: { # Nov 22 - Tokyo
+    14: { # Nov 22 - Tokyo
         "neighborhood": "Toyosu & Shinjuku",
         "highlights": [
             {
@@ -305,7 +322,7 @@ TAILORED_RECOMMENDATIONS = {
             }
         ]
     },
-    14: { # Nov 23 - Tokyo
+    15: { # Nov 23 - Tokyo
         "neighborhood": "Asakusa, Akihabara & Minato",
         "highlights": [
             {
@@ -328,7 +345,7 @@ TAILORED_RECOMMENDATIONS = {
             }
         ]
     },
-    15: { # Nov 24 - Departure
+    16: { # Nov 24 - Departure
         "neighborhood": "Tokyo Station & Haneda Airport",
         "highlights": [
             {
@@ -349,6 +366,30 @@ TAILORED_RECOMMENDATIONS = {
 
 # Allan Su Guidebook details database mapped by normalized spot name
 GUIDEBOOK_DATA = {
+    "shirakawa-go village": {
+        "tagline": "UNESCO World Heritage thatched Gassho-zukuri village",
+        "hours": "Open 24 hours (Outdoor village; Wada House 9:00 AM - 5:00 PM)",
+        "price_jpy": "¥400 (Wada House entrance)",
+        "how_to_access": "Express Highway Bus from Kanazawa Station (approx. 75 min) or Takayama (approx. 50 min).",
+        "things_to_do": [
+            "Explore the fairytale mountain village with steep thatched-roof houses",
+            "Climb to the Shiroyama Viewpoint overlooking the entire Ogimachi valley",
+            "Step inside the historic 300-year-old Wada House to see silk farming lofts"
+        ],
+        "travel_tips": "Luggage lockers and luggage storage counters are available at the Shirakawa-go Bus Terminal. Crisp mountain air — bring a warm jacket!"
+    },
+    "kyoto yokai festival": {
+        "tagline": "Legendary Japanese Monster & Folklore Spectacle",
+        "hours": "10:00 AM - 8:00 PM (Night illumination after dusk)",
+        "price_jpy": "Included in Studio Park admission",
+        "how_to_access": "Toei Kyoto Studio Park (5-minute walk from Uzumasa Station on JR San-in Line).",
+        "things_to_do": [
+            "Encounter live costumed Yokai (Japanese mythical monsters, ghosts, and spirits)",
+            "Walk through the Edo-period samurai film sets transformed into an atmospheric haunted village",
+            "Photograph glowing spooky lanterns and supernatural autumn light displays"
+        ],
+        "travel_tips": "Bring your camera ready for twilight as the park transitions into spooky Edo-period folklore ambiance."
+    },
     "dotonbori": {
         "tagline": "The heart of Osaka",
         "hours": "Open 24 hours",
@@ -992,14 +1033,15 @@ ACTIVITY_SCHEDULES = {
     "ninenzaka & sannenzaka": ("14:30 - 16:00", "Cobbled merchant slopes & artisan pottery shops"),
     "kiyomizu-dera": ("16:15 - 18:30", "Historic wooden stage, sunset & autumn night light-up"),
 
-    # Day 7: Nov 15 - Kyoto (Arashiyama & Kinkaku-ji)
+    # Day 7: Nov 15 - Kyoto (Arashiyama, Kinkaku-ji & Yokai Festival)
     "arashiyama bamboo forest": ("07:30 - 08:45", "Early morning arrival to beat tour crowds"),
     "tenryu-ji": ("09:00 - 10:15", "UNESCO Zen temple & mountain-view garden"),
     "senko-ji temple": ("10:30 - 11:45", "Secluded hillside temple with river overlook"),
     "iwatayama monkey park": ("12:00 - 13:15", "Snow monkeys & panoramic Kyoto overlook"),
-    "matcha tea sweets": ("13:30 - 14:30", "Riverbank matcha soft serve & rest"),
-    "kinkaku-ji": ("15:15 - 16:45", "Golden Pavilion reflecting in the autumn pond"),
-    "ramen sen-no-kaze": ("18:00 - 19:30", "Miso ramen set dinner"),
+    "matcha tea sweets": ("13:30 - 14:15", "Riverbank matcha soft serve & rest"),
+    "kinkaku-ji": ("14:45 - 16:00", "Golden Pavilion reflecting in the autumn pond"),
+    "kyoto yokai festival": ("16:30 - 18:45", "Edo-period studio park transformed into mythical monster spectacle"),
+    "ramen sen-no-kaze": ("19:15 - 20:30", "Warm comforting miso ramen set dinner in Kyoto"),
 
     # Day 8: Nov 16 - Kyoto (Fushimi Inari, Nanzen-ji & Pontocho)
     "fushimi-inari": ("08:30 - 11:00", "Hike through vermilion Torii gates to Yotsutsuji"),
@@ -1028,21 +1070,23 @@ ACTIVITY_SCHEDULES = {
     "higashi-chaya": ("15:15 - 17:15", "Preserved historic geisha teahouse district"),
     "ramen taiga": ("17:45 - 19:15", "Signature black miso ramen dinner"),
 
-    # Day 11: Nov 19 - Takayama & Okuhida
-    "train to takayama": ("08:15 - 10:15", "Scenic Limited Express train into Japanese Alps"),
-    "miyagawa morning market": ("10:30 - 11:30", "Riverside market stalls & local mountain crafts"),
-    "sanmachi-suji": ("11:45 - 13:15", "Old merchant streets, sake tasting & A5 Hida beef"),
-    "takayama jinya": ("13:30 - 14:30", "Edo-period provincial government headquarters"),
-    "hida folk village": ("15:00 - 16:30", "Traditional thatched gassho farmhouses"),
-    "bus to okuhida onsen": ("17:00 - 18:15", "Scenic mountain bus up to Okuhida hot springs"),
-    "yukimurasaki ryokan": ("18:30 onwards", "Ryokan check-in, open-air onsen bath & Kaiseki dinner"),
+    # Day 11: Nov 19 - Shirakawa-go & Okuhida Onsen
+    "bus to shirakawa-go": ("08:40 - 09:55", "Scenic highway express bus through mountain valleys"),
+    "shirakawa-go village": ("10:00 - 13:00", "Explore UNESCO thatched Gassho farmhouses & Wada House"),
+    "bus to takayama": ("13:15 - 14:10", "Express Nohi bus into Takayama"),
+    "bus to okuhida onsen": ("16:40 - 18:00", "Mountain bus up into Okuhida hot springs valley"),
+    "yukimurasaki ryokan": ("18:15 onwards", "Ryokan check-in, private open-air onsen bath & Kaiseki dinner"),
 
-    # Day 12: Nov 20 - Takayama -> Tokyo
-    "morning onsen & breakfast before checking out": ("08:00 - 09:30", "Unhurried breakfast & final morning onsen soak"),
-    "shinhotaka ropeway": ("10:00 - 12:15", "Double-decker cable car into the Northern Alps"),
-    "nishihotakaguchi observation deck": ("11:00 - 12:00", "360° summit views at 2,156m altitude"),
-    "shinkansen to tokyo": ("14:00 - 18:30", "Transit to Toyama/Nagoya & bullet train to Tokyo"),
-    "hotel metropolitan tokyo ikebukuro": ("19:00 onwards", "Check-in at Tokyo base & relaxed evening"),
+    # Day 12: Nov 20 - Shinhotaka Alps, Takayama Old Town -> Tokyo
+    "morning onsen & breakfast before checking out": ("07:30 - 08:45", "Unhurried ryokan breakfast & morning hot spring soak"),
+    "shinhotaka ropeway": ("09:15 - 11:30", "Double-decker cable car into the Northern Alps"),
+    "nishihotakaguchi observation deck": ("09:45 - 10:45", "360° summit views at 2,156m altitude"),
+    "miyagawa morning market": ("12:30 - 13:15", "Riverside market stalls & local crafts"),
+    "sanmachi-suji": ("13:15 - 14:30", "Historic merchant district, A5 Hida beef & sake tasting"),
+    "takayama jinya": ("14:30 - 15:30", "Edo-period provincial government headquarters"),
+    "hida folk village": ("15:45 - 16:45", "Traditional thatched village stroll"),
+    "shinkansen to tokyo": ("17:30 - 21:00", "Limited Express Hida / Shinkansen bullet train to Tokyo"),
+    "hotel metropolitan tokyo ikebukuro": ("21:15 onwards", "Check-in at Tokyo base hotel"),
 
     # Day 13: Nov 21 - Tokyo (Shibuya & Harajuku)
     "meiji shrine": ("09:30 - 11:00", "Tranquil morning walk through sacred evergreen forest"),
@@ -1109,18 +1153,29 @@ def main():
     
     # Map day label to date
     for r in rows:
-        day_str = r['Day'].strip()
-        if not day_str or 'ic card' in r['Name'].lower():
+        day_str = r.get('Day', '').strip()
+        if not day_str or 'ic card' in (r.get('Name') or '').lower():
             # Skip unassigned summary budget rows
             continue
         if day_str not in day_groups:
             day_groups[day_str] = []
         day_groups[day_str].append(r)
 
+    # Helper function to get sort date for each day label
+    def get_day_sort_date(day_label):
+        m = re.search(r'Nov\s+(\d+)', day_label)
+        if m:
+            return int(m.group(1))
+        return 99
+
+    # Sort day groups chronologically: Nov 9 to Nov 24
+    sorted_days = sorted(day_groups.keys(), key=get_day_sort_date)
+
     days_output = []
     day_counter = 0
 
-    for day_str, items in day_groups.items():
+    for day_str in sorted_days:
+        items = day_groups[day_str]
         day_counter += 1
         
         # Parse day number and city/subtitle from day_str
@@ -1137,11 +1192,11 @@ def main():
             display_date = f"Day {day_counter}"
 
         # Identify primary city for the day
-        cities = [it['City'].strip() for it in items if it['City'].strip()]
+        cities = [it.get('City', '').strip() for it in items if it.get('City', '').strip()]
         primary_city = cities[0] if cities else subtitle
         
         # Identify accommodation for this day (the user's chosen hotel)
-        hotel_row = next((it for it in items if it['Activity'].strip().lower() == 'hotel'), None)
+        hotel_row = next((it for it in items if it.get('Activity', '').strip().lower() == 'hotel'), None)
         hotel_info = None
         if hotel_row:
             hotel_info = {
@@ -1158,22 +1213,24 @@ def main():
         item_order = 0
         for it in items:
             item_order += 1
-            activity_type = it['Activity'].strip()
-            raw_name = it['Name'].strip()
+            activity_type = it.get('Activity', '').strip()
+            raw_name = it.get('Name', '').strip()
             norm = normalize_key(raw_name)
             
-            # Lookup guidebook data
+            # Lookup guidebook data using normalized keys
             guidebook_match = None
             for g_key, g_val in GUIDEBOOK_DATA.items():
-                if g_key in norm or norm in g_key:
+                g_norm = normalize_key(g_key)
+                if g_norm == norm or g_norm in norm or norm in g_norm:
                     guidebook_match = g_val
                     break
 
-            # Lookup realistic activity scheduled time
+            # Lookup realistic activity scheduled time using normalized keys
             sched_time = None
             pacing_note = None
             for s_key, s_val in ACTIVITY_SCHEDULES.items():
-                if s_key in norm or norm in s_key:
+                s_norm = normalize_key(s_key)
+                if s_norm == norm or s_norm in norm or norm in s_norm:
                     sched_time = s_val[0]
                     pacing_note = s_val[1]
                     break
@@ -1208,6 +1265,23 @@ def main():
                 }
             }
             day_items.append(item_obj)
+
+        # Helper to sort day_items chronologically by time
+        def get_item_sort_time(item):
+            st = item.get('scheduled_time')
+            if not st:
+                return "99:99"
+            first_time = st.split(' - ')[0].split(' ')[0]
+            # Match HH:MM
+            m = re.match(r'^(\d{1,2}):(\d{2})', first_time)
+            if m:
+                return f"{int(m.group(1)):02d}:{m.group(2)}"
+            return "90:00"
+
+        day_items.sort(key=get_item_sort_time)
+        # Update order property
+        for idx, itm in enumerate(day_items):
+            itm['order'] = idx + 1
             
         # Get curated tailored recommendations for this day
         tailored = TAILORED_RECOMMENDATIONS.get(day_counter, {
@@ -1236,7 +1310,7 @@ def main():
             "end_date": "2026-11-24",
             "total_days": len(days_output),
             "timezone": "Asia/Tokyo",
-            "generated_at": datetime.utcnow().isoformat() + "Z"
+            "generated_at": datetime.now(timezone.utc).isoformat() if hasattr(datetime, "timezone") else datetime.utcnow().isoformat() + "Z"
         },
         "days": days_output,
         "travel_handbook": {

@@ -2,13 +2,42 @@
 let itineraryData = null;
 let currentDayIndex = 1;
 let currentFilter = 'all';
+let currentTab = 'itinerary'; // 'itinerary' | 'checklist' | 'sync' | 'guide'
 let completedItems = JSON.parse(localStorage.getItem('japan_trip_completed') || '{}');
 let customCalendarEvents = JSON.parse(localStorage.getItem('japan_trip_calendar_events') || '[]');
+
+// Packing / Trip Checklist Storage
+const DEFAULT_CHECKLIST_ITEMS = [
+  { id: 'chk-1', text: 'Passport & International Driving Permit (if needed)', completed: true, category: 'Docs' },
+  { id: 'chk-2', text: 'Visit Japan Web QR codes (Customs & Immigration)', completed: true, category: 'Docs' },
+  { id: 'chk-3', text: 'Load digital Suica / Pasmo in Apple Wallet', completed: true, category: 'Transit' },
+  { id: 'chk-4', text: 'eSIM / Pocket WiFi activation & confirmation', completed: true, category: 'Gear' },
+  { id: 'chk-5', text: 'Shinkansen & Thunderbird train reservations', completed: false, category: 'Transit' },
+  { id: 'chk-6', text: 'Universal travel plug adapter (Japan uses Type A)', completed: false, category: 'Gear' },
+  { id: 'chk-7', text: 'Portable power bank (10,000+ mAh) for all-day maps', completed: false, category: 'Gear' },
+  { id: 'chk-8', text: 'Japanese Yen Cash (¥15,000-¥30,000 for shrines & street food)', completed: false, category: 'Money' },
+  { id: 'chk-9', text: 'Credit card with 0% foreign transaction fees (Wise / Revolut)', completed: true, category: 'Money' },
+  { id: 'chk-10', text: 'Comfortable slip-on walking shoes (easy for temple entry)', completed: false, category: 'Packing' },
+  { id: 'chk-11', text: 'Coin pouch (Japan generates lots of 100 & 500 yen coins)', completed: false, category: 'Packing' },
+  { id: 'chk-12', text: 'Luggage lock & forward address (Takkyubin service)', completed: false, category: 'Packing' }
+];
+
+let checklistItems = JSON.parse(localStorage.getItem('japan_trip_checklist') || 'null');
+if (!checklistItems || !Array.isArray(checklistItems) || checklistItems.length === 0) {
+  checklistItems = DEFAULT_CHECKLIST_ITEMS;
+  localStorage.setItem('japan_trip_checklist', JSON.stringify(checklistItems));
+}
+
+// Per-card collapse state memory: key is item.id, value is boolean (true = collapsed)
+let cardCollapseState = {};
+let allCollapsed = false;
 
 // DOM Elements
 const daysNavEl = document.getElementById('days-nav');
 const dayContentEl = document.getElementById('day-content');
-const searchInputEl = document.getElementById('search-input');
+const checklistViewEl = document.getElementById('checklist-view');
+const filterBarEl = document.querySelector('.filter-bar');
+const daysNavContainerEl = document.querySelector('.days-nav-container');
 const calModalEl = document.getElementById('calendar-modal');
 const handbookModalEl = document.getElementById('handbook-modal');
 const syncStatusBtnEl = document.getElementById('sync-status-btn');
@@ -19,6 +48,7 @@ async function initApp() {
   await loadItineraryData();
   renderDaysNav();
   renderCurrentDay();
+  renderChecklistView();
   updateSyncButtonState();
   setupEventListeners();
 }
@@ -65,58 +95,26 @@ function renderDaysNav() {
       <div class="day-pill ${isActive ? 'active' : ''}" data-day="${day.day_index}">
         <span class="dp-day">D${day.day_index}</span>
         <span class="dp-date">${shortDate}</span>
-        <span class="dp-city">${day.city}</span>
+        <span class="dp-city">${escapeHtml(day.city)}</span>
       </div>
     `;
   }).join('');
 
-  // Scroll active pill into view
+  // Scroll active pill into view smoothly
   const activePill = daysNavEl.querySelector('.day-pill.active');
   if (activePill) {
     activePill.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
   }
 }
 
-// 3. Render Current Selected Day
-let allCollapsed = false; // global collapsed state
-
+// 3. Calendar Event Deduplication & Merging Helpers
 function normalizeTitle(str) {
-  // Strip emojis, leading/trailing spaces, lowercase
   return String(str || '')
     .replace(/[\u{1F300}-\u{1FFFF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu, '')
     .replace(/[✈️🚄🚆🚞🚌🚃🚋🛫🛬]/g, '')
-    .replace(/[^\w\s]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
     .toLowerCase();
-}
-
-function itemSortKey(item) {
-  if (!item) return Number.MAX_SAFE_INTEGER;
-  let timeValue = null;
-
-  if (item.scheduled_time) {
-    const timeMatch = String(item.scheduled_time).match(/(\d{1,2}):(\d{2})/);
-    if (timeMatch) {
-      timeValue = Number(timeMatch[1]) * 60 + Number(timeMatch[2]);
-    }
-  }
-
-  if (item.calendar_event && item.calendar_event.time_start) {
-    const timeMatch = String(item.calendar_event.time_start).match(/(\d{1,2}):(\d{2})/);
-    if (timeMatch) {
-      const candidate = Number(timeMatch[1]) * 60 + Number(timeMatch[2]);
-      if (timeValue === null || candidate < timeValue) {
-        timeValue = candidate;
-      }
-    }
-  }
-
-  if (timeValue === null) {
-    return Number.MAX_SAFE_INTEGER;
-  }
-
-  return timeValue;
 }
 
 function itemsOverlapByKeywords(titleA, titleB) {
@@ -125,6 +123,19 @@ function itemsOverlapByKeywords(titleA, titleB) {
   if (!a || !b) return false;
   if (a === b) return true;
 
+  // Transit & Flight key destination matches
+  const keyTransitRoots = ['osaka', 'shin-osaka', 'shinkansen', 'flight', 'haneda', 'tokyo', 'koya', 'kanazawa', 'takayama', 'shirakawa', 'kyoto'];
+  for (const root of keyTransitRoots) {
+    const rootMatchesA = a.includes(root);
+    const rootMatchesB = b.includes(root);
+    if (rootMatchesA && rootMatchesB) {
+      const isTransitA = /train|shinkansen|flight|express|bus/.test(a);
+      const isTransitB = /train|shinkansen|flight|express|bus/.test(b);
+      if (isTransitA && isTransitB) return true;
+    }
+  }
+
+  // General keyword intersection (words of 3+ characters)
   const wordsA = a.split(/\s+/).filter(w => w.length >= 3);
   const wordsB = new Set(b.split(/\s+/).filter(w => w.length >= 3));
   const shared = wordsA.filter(w => wordsB.has(w));
@@ -137,19 +148,15 @@ function mergeCalendarEventIntoItem(item, cal) {
   if (!item.scheduled_time && cal.time) {
     item.scheduled_time = cal.time;
   }
-
   if (!item.address && cal.location) {
     item.address = cal.location;
   }
-
   if (cal.location && !item.google_maps_url) {
     item.google_maps_url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cal.location)}`;
   }
-
   if (cal.description && (!item.user_notes || cal.description.length > item.user_notes.length)) {
     item.user_notes = cal.description;
   }
-
   if (cal.category && !item.category) {
     item.category = cal.category;
   }
@@ -157,13 +164,23 @@ function mergeCalendarEventIntoItem(item, cal) {
   item.is_calendar_event = true;
   item.calendar_event = {
     synced: true,
-    event_id: cal.id || item.calendar_event?.event_id || null,
+    event_id: cal.id || (item.calendar_event && item.calendar_event.event_id) || null,
     summary: item.title,
-    time_start: item.scheduled_time || cal.time || item.calendar_event?.time_start || null,
+    time_start: item.scheduled_time || cal.time || (item.calendar_event && item.calendar_event.time_start) || null,
     time_end: cal.time_end || null
   };
 }
 
+function itemSortKey(item) {
+  const timeStr = item.scheduled_time || (item.calendar_event && item.calendar_event.time_start) || '';
+  const match = timeStr.match(/^(\d{1,2}):(\d{2})/);
+  if (match) {
+    return parseInt(match[1], 10) * 60 + parseInt(match[2], 10);
+  }
+  return 99999;
+}
+
+// 4. Render Current Selected Day
 function renderCurrentDay() {
   if (!itineraryData) return;
 
@@ -173,10 +190,10 @@ function renderCurrentDay() {
   const dayDate = day.date;
   const mergedItems = [...(day.items || [])].map(item => ({ ...item }));
 
+  // Add synced calendar events — deduplicate and merge into itinerary item
   const matchedCalEvents = customCalendarEvents.filter(ev => ev.date === dayDate);
   matchedCalEvents.forEach(cal => {
     const existingIndex = mergedItems.findIndex(it => itemsOverlapByKeywords(it.title, cal.title));
-
     if (existingIndex >= 0) {
       const match = mergedItems[existingIndex];
       mergeCalendarEventIntoItem(match, cal);
@@ -202,8 +219,10 @@ function renderCurrentDay() {
     });
   });
 
+  // Sort chronologically
   mergedItems.sort((a, b) => itemSortKey(a) - itemSortKey(b));
 
+  // Filter items
   const filteredItems = mergedItems.filter(item => {
     if (currentFilter === 'all') return true;
     if (currentFilter === 'attraction') return item.category === 'attraction';
@@ -229,7 +248,7 @@ function renderCurrentDay() {
     </div>
   ` : '';
 
-  // Tailored Recommendations — built but rendered AFTER the schedule list
+  // Tailored Recommendations — rendered strictly AFTER day schedule
   const recs = day.tailored_recommendations;
   let recsHtml = '';
   if (recs && recs.highlights && recs.highlights.length > 0) {
@@ -247,7 +266,7 @@ function renderCurrentDay() {
     `).join('');
 
     recsHtml = `
-      <div class="recommendations-card" style="margin-top: 20px;">
+      <div class="recommendations-card" style="margin-top: 24px;">
         <div class="rec-header">
           <div class="rec-title-group">
             <span class="rec-badge">Curated Gems</span>
@@ -262,13 +281,12 @@ function renderCurrentDay() {
     `;
   }
 
-  // Items List HTML — collapsible cards
+  // Items List HTML — collapsible with clean, uncluttered UX
   const itemsHtml = filteredItems.length > 0 ? filteredItems.map(item => {
     const isDone = !!completedItems[item.id];
     const catClass = `cat-${item.category || 'other'}`;
-    const isCollapsed = allCollapsed;
+    const isCollapsed = cardCollapseState[item.id] !== undefined ? cardCollapseState[item.id] : allCollapsed;
 
-    // Expanded body (hidden when collapsed)
     const expandedBody = `
       <div class="card-body">
         <div class="card-meta-list">
@@ -342,7 +360,7 @@ function renderCurrentDay() {
               ${item.is_calendar_event ? `<span class="category-badge" style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid #10b981;">📅 G-Cal</span>` : ''}
             </div>
             <div class="card-title">${escapeHtml(item.title)}</div>
-            ${item.pacing_note ? `<div class="pacing-tag">⏳ ${escapeHtml(item.pacing_note)}</div>` : ''}
+            ${item.pacing_note && !isCollapsed ? `<div class="pacing-tag">⏳ ${escapeHtml(item.pacing_note)}</div>` : ''}
             ${item.tagline && !isCollapsed ? `<div class="card-tagline">"${escapeHtml(item.tagline)}"</div>` : ''}
           </div>
           <div class="card-header-actions">
@@ -363,7 +381,7 @@ function renderCurrentDay() {
     </div>
   `;
 
-  // Render Day container — schedule first, Curated Gems at the bottom
+  // Render Day container — schedule first, Curated Gems at bottom
   dayContentEl.innerHTML = `
     <div class="day-header-card">
       <div class="day-meta-row">
@@ -392,36 +410,180 @@ function renderCurrentDay() {
   // Bind collapse-all toggle
   document.getElementById('toggle-collapse-btn').addEventListener('click', () => {
     allCollapsed = !allCollapsed;
+    cardCollapseState = {};
     renderCurrentDay();
   });
 
-  // Bind per-card collapse buttons (event delegation)
+  // Bind per-card collapse buttons
   dayContentEl.querySelectorAll('.collapse-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      const card = document.getElementById(`card-${btn.dataset.cardId}`);
-      if (!card) return;
-      card.classList.toggle('card-collapsed');
-      const collapsed = card.classList.contains('card-collapsed');
-      btn.textContent = collapsed ? '›' : '‹';
-      // Re-render body inline instead of full re-render for smoothness
-      const bodyEl = card.querySelector('.card-body');
-      const item = filteredItems.find(it => it.id === btn.dataset.cardId);
-      if (!item) return;
-      if (collapsed) {
-        if (bodyEl) bodyEl.remove();
-        const taglineEl = card.querySelector('.card-tagline');
-        if (taglineEl) taglineEl.remove();
-      } else {
-        // Re-render from scratch to restore body
-        renderCurrentDay();
-      }
+      const id = btn.dataset.cardId;
+      const current = cardCollapseState[id] !== undefined ? cardCollapseState[id] : allCollapsed;
+      cardCollapseState[id] = !current;
+      renderCurrentDay();
+    });
+  });
+
+  // Make header row clickable for easy expanding/collapsing on mobile
+  dayContentEl.querySelectorAll('.card-header-left').forEach(leftEl => {
+    leftEl.addEventListener('click', () => {
+      const parentRow = leftEl.closest('.card-header-row');
+      const id = parentRow.dataset.cardId;
+      const current = cardCollapseState[id] !== undefined ? cardCollapseState[id] : allCollapsed;
+      cardCollapseState[id] = !current;
+      renderCurrentDay();
     });
   });
 }
 
+// 5. Checklist Feature Implementation
+function renderChecklistView() {
+  if (!checklistViewEl) return;
 
-// 4. Calendar Sync Handlers
+  const total = checklistItems.length;
+  const completedCount = checklistItems.filter(i => i.completed).length;
+  const progressPercent = total > 0 ? Math.round((completedCount / total) * 100) : 0;
+
+  const itemsHtml = checklistItems.map((item, idx) => `
+    <div class="checklist-item ${item.completed ? 'checked' : ''}" data-index="${idx}">
+      <button class="checklist-checkbox" data-index="${idx}">
+        ${item.completed ? '✓' : ''}
+      </button>
+      <div class="checklist-text-wrap">
+        <span class="checklist-text">${escapeHtml(item.text)}</span>
+        ${item.category ? `<span class="checklist-cat-badge">${escapeHtml(item.category)}</span>` : ''}
+      </div>
+      <button class="checklist-del-btn" data-index="${idx}" title="Remove item">×</button>
+    </div>
+  `).join('');
+
+  checklistViewEl.innerHTML = `
+    <div class="checklist-header-card">
+      <div class="checklist-title-row">
+        <div>
+          <h2 class="checklist-title">📋 Trip Essentials & Packing Checklist</h2>
+          <p class="checklist-subtitle">Don't forget the vital items before taking off to Japan.</p>
+        </div>
+        <span class="checklist-counter">${completedCount}/${total} Done</span>
+      </div>
+
+      <div class="checklist-progress-bar">
+        <div class="checklist-progress-fill" style="width: ${progressPercent}%;"></div>
+      </div>
+    </div>
+
+    <!-- Add Item Input Form -->
+    <form id="checklist-add-form" class="checklist-add-bar">
+      <input type="text" id="checklist-input" class="checklist-input" placeholder="Add an item not to forget..." required autocomplete="off" />
+      <button type="submit" class="checklist-add-btn">+ Add</button>
+    </form>
+
+    <!-- Checklist Items List -->
+    <div class="checklist-items-list">
+      ${itemsHtml}
+    </div>
+
+    <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+      <button id="btn-reset-checklist" class="btn-mini btn-mini-secondary" style="color: #94a3b8; font-size: 0.76rem;">
+        ↺ Reset Default Travel Items
+      </button>
+      <button id="btn-clear-done-checklist" class="btn-mini btn-mini-secondary" style="color: #f87171; font-size: 0.76rem;">
+        🗑️ Clear Completed
+      </button>
+    </div>
+  `;
+
+  // Bind Form Submit
+  const addForm = document.getElementById('checklist-add-form');
+  addForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const inputEl = document.getElementById('checklist-input');
+    const text = inputEl.value.trim();
+    if (text) {
+      checklistItems.unshift({
+        id: `chk-${Date.now()}`,
+        text: text,
+        completed: false,
+        category: 'Personal'
+      });
+      saveChecklist();
+      renderChecklistView();
+    }
+  });
+
+  // Bind Checkbox Toggle
+  checklistViewEl.querySelectorAll('.checklist-checkbox, .checklist-text-wrap').forEach(el => {
+    el.addEventListener('click', (e) => {
+      const idx = parseInt(el.dataset.index || el.closest('.checklist-item').dataset.index, 10);
+      checklistItems[idx].completed = !checklistItems[idx].completed;
+      saveChecklist();
+      renderChecklistView();
+    });
+  });
+
+  // Bind Delete Item
+  checklistViewEl.querySelectorAll('.checklist-del-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const idx = parseInt(btn.dataset.index, 10);
+      checklistItems.splice(idx, 1);
+      saveChecklist();
+      renderChecklistView();
+    });
+  });
+
+  // Bind Reset & Clear
+  document.getElementById('btn-reset-checklist').addEventListener('click', () => {
+    if (confirm('Reset to standard Japan packing checklist?')) {
+      checklistItems = [...DEFAULT_CHECKLIST_ITEMS];
+      saveChecklist();
+      renderChecklistView();
+    }
+  });
+
+  document.getElementById('btn-clear-done-checklist').addEventListener('click', () => {
+    checklistItems = checklistItems.filter(i => !i.completed);
+    saveChecklist();
+    renderChecklistView();
+  });
+}
+
+function saveChecklist() {
+  localStorage.setItem('japan_trip_checklist', JSON.stringify(checklistItems));
+}
+
+// 6. Tab Switching Engine
+function switchTab(tabName) {
+  currentTab = tabName;
+  document.querySelectorAll('.nav-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.tab === tabName);
+  });
+
+  if (tabName === 'itinerary') {
+    dayContentEl.style.display = 'block';
+    checklistViewEl.style.display = 'none';
+    if (filterBarEl) filterBarEl.style.display = 'flex';
+    if (daysNavContainerEl) daysNavContainerEl.style.display = 'block';
+    closeModals();
+    renderCurrentDay();
+  } else if (tabName === 'checklist') {
+    dayContentEl.style.display = 'none';
+    checklistViewEl.style.display = 'block';
+    if (filterBarEl) filterBarEl.style.display = 'none';
+    if (daysNavContainerEl) daysNavContainerEl.style.display = 'none';
+    closeModals();
+    renderChecklistView();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else if (tabName === 'sync') {
+    calModalEl.classList.add('open');
+  } else if (tabName === 'guide') {
+    populateHandbookModal();
+    handbookModalEl.classList.add('open');
+  }
+}
+
+// 7. Calendar Sync Handlers
 function updateSyncButtonState() {
   if (customCalendarEvents.length > 0) {
     syncStatusBtnEl.classList.add('synced');
@@ -432,7 +594,6 @@ function updateSyncButtonState() {
   }
 }
 
-// Parse ICS text
 function parseIcsFeed(icsText) {
   const events = [];
   const lines = icsText.split(/\r\n|\n|\r/);
@@ -456,7 +617,6 @@ function parseIcsFeed(icsText) {
       } else if (line.startsWith('DTSTART')) {
         const val = line.split(':')[1];
         if (val && val.length >= 8) {
-          // Format: 20261110 or 20261110T090000Z
           const y = val.substring(0, 4);
           const m = val.substring(4, 6);
           const d = val.substring(6, 8);
@@ -472,14 +632,14 @@ function parseIcsFeed(icsText) {
   return events;
 }
 
-// 5. Sample / One-Click Realistic GCal Sync for Japan Trip
+// One-Click Realistic GCal Sync for Japan Trip
 function syncSampleFlightAndTrainEvents() {
   const sampleEvents = [
     {
       id: "ev-flight-in",
       title: "✈️ Flight to Tokyo (Haneda) NH204",
       date: "2026-11-09",
-      time: "15:45 Arrival",
+      time: "15:45 - 17:00",
       location: "Haneda Airport Terminal 3, Tokyo",
       category: "flight",
       description: "Flight arriving at Haneda Airport. Pick up Pocket WiFi / IC Card and take Tokyo Monorail."
@@ -515,7 +675,7 @@ function syncSampleFlightAndTrainEvents() {
       id: "ev-train-tokyo-ret",
       title: "🚄 Hokuriku Shinkansen (Toyama ➔ Tokyo)",
       date: "2026-11-20",
-      time: "16:20 - 18:35",
+      time: "17:30 - 21:00",
       location: "Toyama Station Track 12",
       category: "transport",
       description: "Hakutaka Shinkansen direct to Tokyo Station, then transfer to Ikebukuro."
@@ -524,7 +684,7 @@ function syncSampleFlightAndTrainEvents() {
       id: "ev-flight-out",
       title: "✈️ Departure Flight Haneda NH203",
       date: "2026-11-24",
-      time: "18:20 Departure",
+      time: "15:45 - 17:00",
       location: "Haneda Airport International Terminal 3",
       category: "flight",
       description: "Departing Japan. Check in at least 2.5 hours prior. Duty Free shopping in Edo Ko-ji."
@@ -536,10 +696,10 @@ function syncSampleFlightAndTrainEvents() {
   updateSyncButtonState();
   renderCurrentDay();
   closeModals();
-  alert("✨ Successfully synced flights & train events to your offline schedule!");
+  alert("✨ Successfully synced flights & train events to your offline schedule without duplicates!");
 }
 
-// 6. UI Helpers & Event Listeners
+// 8. Event Listeners Setup
 function setupEventListeners() {
   // Day navigation tap
   daysNavEl.addEventListener('click', (e) => {
@@ -584,22 +744,11 @@ function setupEventListeners() {
     handbookModalEl.classList.add('open');
   });
 
-  // Bottom Nav
+  // Bottom Navigation tabs
   document.querySelectorAll('.nav-tab').forEach(tab => {
     tab.addEventListener('click', (e) => {
       e.preventDefault();
-      const tabName = tab.dataset.tab;
-      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-
-      if (tabName === 'itinerary') {
-        closeModals();
-      } else if (tabName === 'sync') {
-        calModalEl.classList.add('open');
-      } else if (tabName === 'guide') {
-        populateHandbookModal();
-        handbookModalEl.classList.add('open');
-      }
+      switchTab(tab.dataset.tab);
     });
   });
 
@@ -608,6 +757,9 @@ function setupEventListeners() {
     el.addEventListener('click', (e) => {
       if (e.target === el || e.target.classList.contains('btn-close')) {
         closeModals();
+        document.querySelectorAll('.nav-tab').forEach(t => {
+          t.classList.toggle('active', t.dataset.tab === currentTab);
+        });
       }
     });
   });
