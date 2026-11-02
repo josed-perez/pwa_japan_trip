@@ -42,6 +42,29 @@ const calModalEl = document.getElementById('calendar-modal');
 const handbookModalEl = document.getElementById('handbook-modal');
 const syncStatusBtnEl = document.getElementById('sync-status-btn');
 
+function normalizeGoogleCalendarTimeToJst(rawTime) {
+  if (!rawTime || typeof rawTime !== 'string') return rawTime;
+
+  const trimmed = rawTime.trim();
+  if (!trimmed) return rawTime;
+  if (trimmed.includes('JST')) return trimmed;
+
+  const parts = trimmed.split(/\s*-\s*/).map(part => part.trim()).filter(Boolean);
+  const convertedParts = parts.map(part => {
+    const match = part.match(/^(\d{1,2}):(\d{2})$/);
+    if (!match) return part;
+
+    const hour = Number(match[1]);
+    const minute = Number(match[2]);
+    const totalMinutes = (hour * 60 + minute + 8 * 60) % (24 * 60);
+    const adjustedHour = String(Math.floor(totalMinutes / 60)).padStart(2, '0');
+    const adjustedMinute = String(totalMinutes % 60).padStart(2, '0');
+    return `${adjustedHour}:${adjustedMinute}`;
+  });
+
+  return `${convertedParts.join(' - ')} JST`;
+}
+
 // Initialize App
 async function initApp() {
   registerServiceWorker();
@@ -145,8 +168,10 @@ function itemsOverlapByKeywords(titleA, titleB) {
 function mergeCalendarEventIntoItem(item, cal) {
   if (!item || !cal) return;
 
+  const normalizedCalTime = normalizeGoogleCalendarTimeToJst(cal.time || item.scheduled_time || (item.calendar_event && item.calendar_event.time_start) || null);
+
   if (!item.scheduled_time && cal.time) {
-    item.scheduled_time = cal.time;
+    item.scheduled_time = normalizedCalTime;
   }
   if (!item.address && cal.location) {
     item.address = cal.location;
@@ -166,7 +191,7 @@ function mergeCalendarEventIntoItem(item, cal) {
     synced: true,
     event_id: cal.id || (item.calendar_event && item.calendar_event.event_id) || null,
     summary: item.title,
-    time_start: item.scheduled_time || cal.time || (item.calendar_event && item.calendar_event.time_start) || null,
+    time_start: item.scheduled_time || normalizedCalTime || (item.calendar_event && item.calendar_event.time_start) || null,
     time_end: cal.time_end || null
   };
 }
@@ -210,12 +235,12 @@ function renderCurrentDay() {
       cost_jpy: null,
       address: cal.location || null,
       google_maps_url: cal.location ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(cal.location)}` : null,
-      scheduled_time: cal.time || null,
+      scheduled_time: normalizeGoogleCalendarTimeToJst(cal.time || null),
       pacing_note: null,
       opening_hours: null,
       user_notes: cal.description || 'Synced from Google Calendar',
       is_calendar_event: true,
-      calendar_event: { synced: true, event_id: cal.id || null, time_start: cal.time || null }
+      calendar_event: { synced: true, event_id: cal.id || null, time_start: normalizeGoogleCalendarTimeToJst(cal.time || null) }
     });
   });
 
@@ -623,7 +648,8 @@ function parseIcsFeed(icsText) {
           currentEvent.date = `${y}-${m}-${d}`;
           if (val.includes('T')) {
             const timePart = val.split('T')[1].replace('Z', '');
-            currentEvent.time = `${timePart.substring(0, 2)}:${timePart.substring(2, 4)}`;
+            const rawTime = `${timePart.substring(0, 2)}:${timePart.substring(2, 4)}`;
+            currentEvent.time = normalizeGoogleCalendarTimeToJst(rawTime);
           }
         }
       }
@@ -639,7 +665,7 @@ function syncSampleFlightAndTrainEvents() {
       id: "ev-flight-in",
       title: "✈️ Flight to Tokyo (Haneda) NH204",
       date: "2026-11-09",
-      time: "15:45 - 17:00",
+      time: normalizeGoogleCalendarTimeToJst("15:45 - 17:00"),
       location: "Haneda Airport Terminal 3, Tokyo",
       category: "flight",
       description: "Flight arriving at Haneda Airport. Pick up Pocket WiFi / IC Card and take Tokyo Monorail."
@@ -648,7 +674,7 @@ function syncSampleFlightAndTrainEvents() {
       id: "ev-train-osaka",
       title: "Train to Shin-Osaka",
       date: "2026-11-10",
-      time: "10:15 - 12:45",
+      time: normalizeGoogleCalendarTimeToJst("10:15 - 12:45"),
       location: "Tokyo Station Shinkansen Platform 14",
       category: "transport",
       description: "Nozomi Shinkansen to Shin-Osaka. Oversized baggage reserved in Car 16, Row 17. ~2h30m journey with Mt. Fuji views on the right side."
@@ -657,7 +683,7 @@ function syncSampleFlightAndTrainEvents() {
       id: "ev-train-koya",
       title: "🚞 Nankai Koya Limited Express (Namba ➔ Gokurakubashi)",
       date: "2026-11-12",
-      time: "09:00 - 10:25",
+      time: normalizeGoogleCalendarTimeToJst("09:00 - 10:25"),
       location: "Nankai Namba Station",
       category: "transport",
       description: "Transfer to Koyasan Cable Car at Gokurakubashi. Koyasan World Heritage Pass valid."
@@ -666,7 +692,7 @@ function syncSampleFlightAndTrainEvents() {
       id: "ev-train-kanazawa",
       title: "🚆 JR Thunderbird Limited Express (Kyoto ➔ Kanazawa)",
       date: "2026-11-17",
-      time: "09:40 - 11:50",
+      time: normalizeGoogleCalendarTimeToJst("09:40 - 11:50"),
       location: "Kyoto Station Track 0",
       category: "transport",
       description: "Scenic ride along Lake Biwa into Hokuriku region. Reserved seats Car 4."
@@ -675,7 +701,7 @@ function syncSampleFlightAndTrainEvents() {
       id: "ev-train-tokyo-ret",
       title: "🚄 Hokuriku Shinkansen (Toyama ➔ Tokyo)",
       date: "2026-11-20",
-      time: "17:30 - 21:00",
+      time: normalizeGoogleCalendarTimeToJst("17:30 - 21:00"),
       location: "Toyama Station Track 12",
       category: "transport",
       description: "Hakutaka Shinkansen direct to Tokyo Station, then transfer to Ikebukuro."
@@ -684,7 +710,7 @@ function syncSampleFlightAndTrainEvents() {
       id: "ev-flight-out",
       title: "✈️ Departure Flight Haneda NH203",
       date: "2026-11-24",
-      time: "15:45 - 17:00",
+      time: normalizeGoogleCalendarTimeToJst("15:45 - 17:00"),
       location: "Haneda Airport International Terminal 3",
       category: "flight",
       description: "Departing Japan. Check in at least 2.5 hours prior. Duty Free shopping in Edo Ko-ji."
