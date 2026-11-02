@@ -6,6 +6,35 @@ let currentTab = 'itinerary'; // 'itinerary' | 'checklist' | 'sync' | 'guide'
 let completedItems = JSON.parse(localStorage.getItem('japan_trip_completed') || '{}');
 let customCalendarEvents = JSON.parse(localStorage.getItem('japan_trip_calendar_events') || '[]');
 
+function normalizeGoogleCalendarTimeToJst(rawTime) {
+  if (!rawTime || typeof rawTime !== 'string') return rawTime;
+
+  const trimmed = rawTime.trim();
+  if (!trimmed) return rawTime;
+  if (trimmed.includes('JST')) return trimmed;
+
+  const parts = trimmed.split(/\s*-\s*/).map(part => part.trim()).filter(Boolean);
+  const convertedParts = parts.map(part => {
+    const match = part.match(/^(\d{1,2}):(\d{2})$/);
+    if (!match) return part;
+
+    const hour = Number(match[1]);
+    const minute = Number(match[2]);
+    const totalMinutes = (hour * 60 + minute + 8 * 60) % (24 * 60);
+    const adjustedHour = String(Math.floor(totalMinutes / 60)).padStart(2, '0');
+    const adjustedMinute = String(totalMinutes % 60).padStart(2, '0');
+    return `${adjustedHour}:${adjustedMinute}`;
+  });
+
+  return `${convertedParts.join(' - ')} JST`;
+}
+
+customCalendarEvents = Array.isArray(customCalendarEvents)
+  ? customCalendarEvents.map(ev => ({ ...ev, time: ev.time ? normalizeGoogleCalendarTimeToJst(ev.time) : ev.time, time_end: ev.time_end ? normalizeGoogleCalendarTimeToJst(ev.time_end) : ev.time_end }))
+  : [];
+
+localStorage.setItem('japan_trip_calendar_events', JSON.stringify(customCalendarEvents));
+
 // Packing / Trip Checklist Storage
 const DEFAULT_CHECKLIST_ITEMS = [
   { id: 'chk-1', text: 'Passport & International Driving Permit (if needed)', completed: true, category: 'Docs' },
@@ -41,29 +70,6 @@ const daysNavContainerEl = document.querySelector('.days-nav-container');
 const calModalEl = document.getElementById('calendar-modal');
 const handbookModalEl = document.getElementById('handbook-modal');
 const syncStatusBtnEl = document.getElementById('sync-status-btn');
-
-function normalizeGoogleCalendarTimeToJst(rawTime) {
-  if (!rawTime || typeof rawTime !== 'string') return rawTime;
-
-  const trimmed = rawTime.trim();
-  if (!trimmed) return rawTime;
-  if (trimmed.includes('JST')) return trimmed;
-
-  const parts = trimmed.split(/\s*-\s*/).map(part => part.trim()).filter(Boolean);
-  const convertedParts = parts.map(part => {
-    const match = part.match(/^(\d{1,2}):(\d{2})$/);
-    if (!match) return part;
-
-    const hour = Number(match[1]);
-    const minute = Number(match[2]);
-    const totalMinutes = (hour * 60 + minute + 8 * 60) % (24 * 60);
-    const adjustedHour = String(Math.floor(totalMinutes / 60)).padStart(2, '0');
-    const adjustedMinute = String(totalMinutes % 60).padStart(2, '0');
-    return `${adjustedHour}:${adjustedMinute}`;
-  });
-
-  return `${convertedParts.join(' - ')} JST`;
-}
 
 // Initialize App
 async function initApp() {
