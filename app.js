@@ -30,9 +30,9 @@ function normalizeGoogleCalendarTimeToJst(rawTime) {
 }
 
 function isGoogleFlightEvent(entry) {
-  if (!entry) return false;
-  const text = `${entry.title || ''} ${entry.category || ''} ${entry.description || ''}`.toLowerCase();
-  return /flight|departure|arrival|dubai|dxb|haneda|hnd|narita|nrt/.test(text);
+  // This trip intentionally excludes flight entries from the UI, since arrival and departure
+  // are treated as airport transfer windows rather than formal flight blocks.
+  return false;
 }
 
 function removeLegacyFlightItems(items) {
@@ -44,39 +44,10 @@ function removeLegacyFlightItems(items) {
 }
 
 function upsertFlightFromGoogleCalendar(day, calEvent) {
+  // Disabled: we no longer want to insert synthetic flight cards into the trip.
   if (!day || !calEvent) return;
-
   const cleanItems = removeLegacyFlightItems(day.items || []);
-  const replacement = {
-    id: `flight-${calEvent.id || day.date || 'calendar'}`,
-    title: calEvent.title || 'Flight',
-    category: 'flight',
-    order: 1,
-    city: day.city,
-    scheduled_time: normalizeGoogleCalendarTimeToJst(calEvent.time || null),
-    pacing_note: calEvent.description || 'Synced from Google Calendar',
-    cost_eur: null,
-    cost_jpy: null,
-    address: calEvent.location || null,
-    google_maps_url: calEvent.location ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(calEvent.location)}` : null,
-    website: null,
-    user_notes: calEvent.description || 'Synced from Google Calendar',
-    tagline: null,
-    opening_hours: null,
-    how_to_access: null,
-    highlights: [],
-    travel_tip: null,
-    is_calendar_event: true,
-    calendar_event: {
-      synced: true,
-      event_id: calEvent.id || null,
-      summary: calEvent.title || 'Flight',
-      time_start: normalizeGoogleCalendarTimeToJst(calEvent.time || null),
-      time_end: calEvent.time_end || null
-    }
-  };
-
-  day.items = [replacement, ...cleanItems];
+  day.items = cleanItems;
 }
 
 customCalendarEvents = Array.isArray(customCalendarEvents)
@@ -197,9 +168,8 @@ function normalizeTitle(str) {
 }
 
 function isFlightEventCandidate(entry) {
-  if (!entry) return false;
-  const text = `${entry.title || ''} ${entry.category || ''} ${entry.description || ''}`.toLowerCase();
-  return /flight|departure|arrival|dubai|dxb|haneda|hnd|narita|nrt/.test(text);
+  // Flights are intentionally excluded from this itinerary model.
+  return false;
 }
 
 function itemsOverlapByKeywords(titleA, titleB) {
@@ -353,7 +323,7 @@ function renderCurrentDay() {
     if (currentFilter === 'all') return true;
     if (currentFilter === 'attraction') return item.category === 'attraction';
     if (currentFilter === 'restaurant') return item.category === 'restaurant' || item.category === 'cafe';
-    if (currentFilter === 'transport') return item.category === 'transport' || item.category === 'flight';
+    if (currentFilter === 'transport') return item.category === 'transport';
     if (currentFilter === 'shopping') return item.category === 'shopping';
     return true;
   });
@@ -761,60 +731,62 @@ function parseIcsFeed(icsText) {
 
 // One-Click Realistic GCal Sync for Japan Trip
 function syncSampleFlightAndTrainEvents() {
+  // All flights removed intentionally. We keep the actual arrival / departure transfer windows
+  // as transport items so the itinerary remains realistic without showing flight blocks.
   const sampleEvents = [
     {
-      id: "ev-flight-in",
-      title: "✈️ DXB → HND via Dubai flight",
-      date: "2026-11-08",
-      time: normalizeGoogleCalendarTimeToJst("23:50 - 01:35"),
-      location: "Dubai International Airport (DXB)",
-      category: "flight",
-      description: "Outbound flight via Dubai. This entry replaces the itinerary flight and reflects the actual Google Calendar flight route."
+      id: "ev-arrival-tokyo",
+      title: "Tokyo Airport Arrival Transfer",
+      date: "2026-11-09",
+      time: "22:30 - 23:15 JST",
+      location: "Haneda Airport / Tokyo Central",
+      category: "transport",
+      description: "Land in Tokyo at 22:30 JST. Transfer to the hotel, immigration, and settle in before a calm arrival night."
     },
     {
       id: "ev-train-osaka",
       title: "Train to Shin-Osaka",
       date: "2026-11-10",
-      time: normalizeGoogleCalendarTimeToJst("10:15 - 12:45"),
+      time: "10:15 - 12:45 JST",
       location: "Tokyo Station Shinkansen Platform 14",
       category: "transport",
       description: "Nozomi Shinkansen to Shin-Osaka. Oversized baggage reserved in Car 16, Row 17. ~2h30m journey with Mt. Fuji views on the right side."
     },
     {
       id: "ev-train-koya",
-      title: "🚞 Nankai Koya Limited Express (Namba ➔ Gokurakubashi)",
+      title: "Nankai Koya Limited Express",
       date: "2026-11-12",
-      time: normalizeGoogleCalendarTimeToJst("09:00 - 10:25"),
+      time: "09:00 - 10:25 JST",
       location: "Nankai Namba Station",
       category: "transport",
       description: "Transfer to Koyasan Cable Car at Gokurakubashi. Koyasan World Heritage Pass valid."
     },
     {
       id: "ev-train-kanazawa",
-      title: "🚆 JR Thunderbird Limited Express (Kyoto ➔ Kanazawa)",
+      title: "JR Thunderbird Limited Express",
       date: "2026-11-17",
-      time: normalizeGoogleCalendarTimeToJst("09:40 - 11:50"),
+      time: "09:40 - 11:50 JST",
       location: "Kyoto Station Track 0",
       category: "transport",
       description: "Scenic ride along Lake Biwa into Hokuriku region. Reserved seats Car 4."
     },
     {
       id: "ev-train-tokyo-ret",
-      title: "🚄 Hokuriku Shinkansen (Toyama ➔ Tokyo)",
+      title: "Shinkansen back to Tokyo",
       date: "2026-11-20",
-      time: normalizeGoogleCalendarTimeToJst("17:30 - 21:00"),
+      time: "17:30 - 21:00 JST",
       location: "Toyama Station Track 12",
       category: "transport",
-      description: "Hakutaka Shinkansen direct to Tokyo Station, then transfer to Ikebukuro."
+      description: "Bullet train back to Tokyo after Takayama and the Alps segment."
     },
     {
-      id: "ev-flight-out",
-      title: "✈️ HND → DXB return flight",
+      id: "ev-departure-tokyo-hamburg",
+      title: "Tokyo departure transfer to Hamburg",
       date: "2026-11-25",
-      time: normalizeGoogleCalendarTimeToJst("18:20 - 22:10"),
+      time: "00:05 JST",
       location: "Haneda Airport International Terminal 3",
-      category: "flight",
-      description: "Return flight with a Dubai connection. This replaces the original itinerary return flight."
+      category: "transport",
+      description: "Departure time to Hamburg from Tokyo: 00:05 JST. Keep this as a transport note rather than a flight entry."
     }
   ];
 
@@ -823,7 +795,7 @@ function syncSampleFlightAndTrainEvents() {
   updateSyncButtonState();
   renderCurrentDay();
   closeModals();
-  alert("✨ Successfully synced flights & train events to your offline schedule without duplicates!");
+  alert("✨ Synced the realistic Tokyo arrival/departure windows without displaying flight cards in the itinerary!");
 }
 
 // 8. Event Listeners Setup
