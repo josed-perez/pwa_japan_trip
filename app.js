@@ -29,6 +29,56 @@ function normalizeGoogleCalendarTimeToJst(rawTime) {
   return `${convertedParts.join(' - ')} JST`;
 }
 
+function isGoogleFlightEvent(entry) {
+  if (!entry) return false;
+  const text = `${entry.title || ''} ${entry.category || ''} ${entry.description || ''}`.toLowerCase();
+  return /flight|departure|arrival|dubai|dxb|haneda|hnd|narita|nrt/.test(text);
+}
+
+function removeLegacyFlightItems(items) {
+  return (items || []).filter(item => {
+    if (!item) return false;
+    if (item.category === 'flight') return false;
+    return !/flight/i.test(item.title || '');
+  });
+}
+
+function upsertFlightFromGoogleCalendar(day, calEvent) {
+  if (!day || !calEvent) return;
+
+  const cleanItems = removeLegacyFlightItems(day.items || []);
+  const replacement = {
+    id: `flight-${calEvent.id || day.date || 'calendar'}`,
+    title: calEvent.title || 'Flight',
+    category: 'flight',
+    order: 1,
+    city: day.city,
+    scheduled_time: normalizeGoogleCalendarTimeToJst(calEvent.time || null),
+    pacing_note: calEvent.description || 'Synced from Google Calendar',
+    cost_eur: null,
+    cost_jpy: null,
+    address: calEvent.location || null,
+    google_maps_url: calEvent.location ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(calEvent.location)}` : null,
+    website: null,
+    user_notes: calEvent.description || 'Synced from Google Calendar',
+    tagline: null,
+    opening_hours: null,
+    how_to_access: null,
+    highlights: [],
+    travel_tip: null,
+    is_calendar_event: true,
+    calendar_event: {
+      synced: true,
+      event_id: calEvent.id || null,
+      summary: calEvent.title || 'Flight',
+      time_start: normalizeGoogleCalendarTimeToJst(calEvent.time || null),
+      time_end: calEvent.time_end || null
+    }
+  };
+
+  day.items = [replacement, ...cleanItems];
+}
+
 customCalendarEvents = Array.isArray(customCalendarEvents)
   ? customCalendarEvents.map(ev => ({ ...ev, time: ev.time ? normalizeGoogleCalendarTimeToJst(ev.time) : ev.time, time_end: ev.time_end ? normalizeGoogleCalendarTimeToJst(ev.time_end) : ev.time_end }))
   : [];
@@ -240,10 +290,22 @@ function renderCurrentDay() {
   if (!day) return;
 
   const dayDate = day.date;
+  const itineraryDays = itineraryData.days || [];
+  const firstDayDate = itineraryDays[0]?.date;
+  const lastDayDate = itineraryDays[itineraryDays.length - 1]?.date;
   const mergedItems = [...(day.items || [])].map(item => ({ ...item }));
 
   // Add synced calendar events — deduplicate and merge into itinerary item
-  const matchedCalEvents = customCalendarEvents.filter(ev => ev.date === dayDate);
+  const matchedCalEvents = customCalendarEvents.filter(ev => {
+    if (!ev || !ev.date) return false;
+    if (ev.date === dayDate) return true;
+    if (isGoogleFlightEvent(ev)) {
+      if (dayDate === firstDayDate && ev.date < firstDayDate) return true;
+      if (dayDate === lastDayDate && ev.date > lastDayDate) return true;
+    }
+    return false;
+  });
+
   matchedCalEvents.forEach(cal => {
     const matchingFlightIndex = mergedItems.findIndex(it => {
       if (it.category === 'flight' || /flight/i.test(it.title || '')) {
@@ -256,6 +318,11 @@ function renderCurrentDay() {
     if (existingIndex >= 0) {
       const match = mergedItems[existingIndex];
       mergeCalendarEventIntoItem(match, cal);
+      return;
+    }
+
+    if (isGoogleFlightEvent(cal) && (dayDate === firstDayDate || dayDate === lastDayDate)) {
+      upsertFlightFromGoogleCalendar(day, cal);
       return;
     }
 
