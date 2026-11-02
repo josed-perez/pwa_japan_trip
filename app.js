@@ -146,11 +146,24 @@ function normalizeTitle(str) {
     .toLowerCase();
 }
 
+function isFlightEventCandidate(entry) {
+  if (!entry) return false;
+  const text = `${entry.title || ''} ${entry.category || ''} ${entry.description || ''}`.toLowerCase();
+  return /flight|departure|arrival|dubai|dxb|haneda|hnd|narita|nrt/.test(text);
+}
+
 function itemsOverlapByKeywords(titleA, titleB) {
   const a = normalizeTitle(titleA);
   const b = normalizeTitle(titleB);
   if (!a || !b) return false;
   if (a === b) return true;
+
+  if (isFlightEventCandidate({ title: titleA, category: 'flight' }) && isFlightEventCandidate({ title: titleB, category: 'flight' })) {
+    const flightWordsA = a.replace(/\b(flight|departure|arrival|to|from|via)\b/g, ' ').split(/\s+/).filter(Boolean);
+    const flightWordsB = b.replace(/\b(flight|departure|arrival|to|from|via)\b/g, ' ').split(/\s+/).filter(Boolean);
+    const sharedFlightWords = flightWordsA.filter(word => word.length >= 3 && flightWordsB.includes(word));
+    if (sharedFlightWords.length > 0 || /dubai|dxb|haneda|hnd|narita|nrt|tokyo/.test(`${a} ${b}`)) return true;
+  }
 
   // Transit & Flight key destination matches
   const keyTransitRoots = ['osaka', 'shin-osaka', 'shinkansen', 'flight', 'haneda', 'tokyo', 'koya', 'kanazawa', 'takayama', 'shirakawa', 'kyoto'];
@@ -176,7 +189,15 @@ function mergeCalendarEventIntoItem(item, cal) {
 
   const normalizedCalTime = normalizeGoogleCalendarTimeToJst(cal.time || item.scheduled_time || (item.calendar_event && item.calendar_event.time_start) || null);
 
+  if (isFlightEventCandidate(cal) || item.category === 'flight' || /flight/i.test(item.title || '')) {
+    item.title = cal.title || item.title;
+    item.category = 'flight';
+  }
+
   if (!item.scheduled_time && cal.time) {
+    item.scheduled_time = normalizedCalTime;
+  }
+  if (cal.time) {
     item.scheduled_time = normalizedCalTime;
   }
   if (!item.address && cal.location) {
@@ -224,7 +245,14 @@ function renderCurrentDay() {
   // Add synced calendar events — deduplicate and merge into itinerary item
   const matchedCalEvents = customCalendarEvents.filter(ev => ev.date === dayDate);
   matchedCalEvents.forEach(cal => {
-    const existingIndex = mergedItems.findIndex(it => itemsOverlapByKeywords(it.title, cal.title));
+    const matchingFlightIndex = mergedItems.findIndex(it => {
+      if (it.category === 'flight' || /flight/i.test(it.title || '')) {
+        return isFlightEventCandidate(cal) || /flight/i.test(cal.title || '');
+      }
+      return itemsOverlapByKeywords(it.title, cal.title);
+    });
+
+    const existingIndex = matchingFlightIndex >= 0 ? matchingFlightIndex : mergedItems.findIndex(it => itemsOverlapByKeywords(it.title, cal.title));
     if (existingIndex >= 0) {
       const match = mergedItems[existingIndex];
       mergeCalendarEventIntoItem(match, cal);
@@ -669,12 +697,12 @@ function syncSampleFlightAndTrainEvents() {
   const sampleEvents = [
     {
       id: "ev-flight-in",
-      title: "✈️ Flight to Tokyo (Haneda) NH204",
-      date: "2026-11-09",
-      time: normalizeGoogleCalendarTimeToJst("15:45 - 17:00"),
-      location: "Haneda Airport Terminal 3, Tokyo",
+      title: "✈️ DXB → HND via Dubai flight",
+      date: "2026-11-08",
+      time: normalizeGoogleCalendarTimeToJst("23:50 - 01:35"),
+      location: "Dubai International Airport (DXB)",
       category: "flight",
-      description: "Flight arriving at Haneda Airport. Pick up Pocket WiFi / IC Card and take Tokyo Monorail."
+      description: "Outbound flight via Dubai. This entry replaces the itinerary flight and reflects the actual Google Calendar flight route."
     },
     {
       id: "ev-train-osaka",
@@ -714,12 +742,12 @@ function syncSampleFlightAndTrainEvents() {
     },
     {
       id: "ev-flight-out",
-      title: "✈️ Departure Flight Haneda NH203",
-      date: "2026-11-24",
-      time: normalizeGoogleCalendarTimeToJst("15:45 - 17:00"),
+      title: "✈️ HND → DXB return flight",
+      date: "2026-11-25",
+      time: normalizeGoogleCalendarTimeToJst("18:20 - 22:10"),
       location: "Haneda Airport International Terminal 3",
       category: "flight",
-      description: "Departing Japan. Check in at least 2.5 hours prior. Duty Free shopping in Edo Ko-ji."
+      description: "Return flight with a Dubai connection. This replaces the original itinerary return flight."
     }
   ];
 
